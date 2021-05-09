@@ -3,6 +3,7 @@
 #include "expr_ast.hh"
 #include "../lexer/lexer.hh"
 #include <memory>
+#include <exception>
 
 class parser {
 public:
@@ -12,6 +13,8 @@ public:
 
     std::unique_ptr<expr_ast> parse_number_expr();
     std::unique_ptr<expr_ast> parse_identifier_expr();
+
+    std::unique_ptr<expr_ast> parse_paren_expr();
     std::unique_ptr<expr_ast> parse_primary();
     std::unique_ptr<expr_ast> parse_expression();
     std::unique_ptr<expr_ast> parse_bin_oper_right(int expr_prec, std::unique_ptr<expr_ast> shift_left);

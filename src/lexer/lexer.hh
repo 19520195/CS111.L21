@@ -1,7 +1,7 @@
 #pragma once
 
 #include "token.hh"
-#include "precedence.hh"
+#include "bin_op_prec.hh"
 #include <iostream>
 
 class lexer {

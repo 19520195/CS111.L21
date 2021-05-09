@@ -57,29 +57,22 @@ token lexer::forward_token() {
         return TOKEN_NUMBER;
     }
 
-    // Comment ingnore
+    // Comment ignore
     if (m_last_char == '#') {
-        do if (this->get_next_char() == '\n') ++m_line;
+        do m_line += (this->get_next_char() == '\n');
         while (m_last_char != EOF && m_last_char != '\n');
-        if (m_last_char != EOF) {
+
+        if (m_last_char != EOF)
             return this->get_next_token();
-        }
     }
 
-    // End of file
-    if (m_last_char == EOF) {
-        this->get_next_char();
-        return END_OF_FILE;
+    switch (this->m_last_char) {
+        case EOF: return TOKEN_END_OF_FILE;
+        case '(': return TOKEN_OPEN_PAREN;
+        case ')': return TOKEN_CLOSE_PAREN;
+        case ';': return TOKEN_SEP;
+        default : return TOKEN_UNKNOW_CHAR;
     }
-
-    // Seperate character
-    if (m_last_char == ';') {
-        this->get_next_char();
-        return TOKEN_SEPARATOR;
-    }
-
-    // Strange characeter
-    return CHARACTER;
 }
 
 char lexer::get_next_char() {

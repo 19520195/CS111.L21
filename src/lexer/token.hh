@@ -1,6 +1,9 @@
 #pragma once
 
 enum token : char {
+    TOKEN_OPEN_PAREN,
+    TOKEN_CLOSE_PAREN,
+
     // Bultin function
     TOKEN_INCR  ,
     TOKEN_DECR  ,
@@ -33,10 +36,10 @@ enum token : char {
     TOKEN_NUMBER    ,
 
     // SEPARATOR ;
-    TOKEN_SEPARATOR,
+    TOKEN_SEP,
 
     // SPECICAL CHARACTER
-    END_OF_FILE = -1,
-    END_OF_LINE = -2,
-    CHARACTER   = -3,
+    TOKEN_END_OF_FILE = -1,
+    TOKEN_END_OF_LINE = -2,
+    TOKEN_UNKNOW_CHAR = -3,
 };
