@@ -1,6 +1,7 @@
 #pragma
 
 #include <map>
+#include <string>
 
 class var_base {
 public:
