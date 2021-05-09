@@ -1,4 +1,5 @@
 # Visual Code
 .vscode
+
+# CMake build files
 build
-sample
