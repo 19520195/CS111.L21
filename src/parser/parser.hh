@@ -1,7 +1,7 @@
 #pragma once
 
 #include "expr_ast.hh"
-#include "../lexer/lexer.hh"
+#include <lexer/lexer.hh>
 #include <memory>
 #include <exception>
 
@@ -16,11 +16,11 @@ public:
 
     std::unique_ptr<expr_ast> parse_paren_expr();
     std::unique_ptr<expr_ast> parse_primary();
-    std::unique_ptr<expr_ast> parse_expression();
-    std::unique_ptr<expr_ast> parse_bin_oper_right(int expr_prec, std::unique_ptr<expr_ast> shift_left);
+    std::unique_ptr<expr_ast> parse_expr();
+    std::unique_ptr<expr_ast> parse_bin_op(int expr_prec, std::unique_ptr<expr_ast> shift_left);
 
-    void parse_if_expr();
-    void parse();
+    std::unique_ptr<expr_ast> parse_if_expr();
+    void live_parse();
 
 private:
     std::unique_ptr<lexer> m_lexer;

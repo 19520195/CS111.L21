@@ -1,8 +1,10 @@
 #pragma once
 
-#include "token.hh"
+#include "lexer_token.hh"
 
 enum bin_op_prec : int {
+    PREC_NONE         =  0,
+    PREC_NOT_EQUAL    = 10,
     PREC_LESS_THAN    = 10,
     PREC_GREATER_THAN = 10,
 
@@ -12,4 +14,4 @@ enum bin_op_prec : int {
     PREC_MULTIPLY = 40,
 };
 
-bin_op_prec get_bin_op_prec(const token& tok);
+bin_op_prec get_bin_op_prec(const lexer_token& tok);
