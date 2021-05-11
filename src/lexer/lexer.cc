@@ -109,3 +109,7 @@ unsigned int lexer::get_number_value() const {
 std::string lexer::get_identifier_value() const {
     return m_identifier_value;
 }
+
+std::string lexer::get_cursor_info() const {
+    return std::to_string(get_line()) +  ":" + std::to_string(get_index());
+}

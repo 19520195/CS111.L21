@@ -1,5 +1,7 @@
 #pragma once
 
+#include "bin_op_prec.hh"
+
 class lexer_token {
 public:
     enum token_value : char {
@@ -55,6 +57,9 @@ public:
 
     operator token_value() const;
     explicit operator bool() = delete;
+
+    bool is_builtin() const;
+    bin_op_prec get_prec() const;
 
 private:
     token_value m_value;

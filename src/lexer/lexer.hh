@@ -25,6 +25,7 @@ public:
     unsigned int get_index() const;
     unsigned int get_number_value() const;
     std::string  get_identifier_value() const;
+    std::string  get_cursor_info() const;
 
 private:
     char  m_last_char;
