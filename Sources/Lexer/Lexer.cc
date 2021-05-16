@@ -61,6 +61,14 @@ Token Lexer::ForwardToken()
     return Token::FromString(m_Identifier);
   }
 
+  // Comments
+  if (GetLastChar() == '#')
+  {
+    while (GetNextChar() != '\n');
+    GetNextChar();
+    return GetNextToken();
+  }
+
   // End of file
   if (GetLastChar() == EOF)
     return Token::END_OF_FILE;

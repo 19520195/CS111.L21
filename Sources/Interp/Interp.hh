@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Config.hh"
 #include "Lexer/Lexer.hh"
 #include "Parser/Parser.hh"
 #include "DataTable.hh"

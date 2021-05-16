@@ -1,13 +1,13 @@
 #include "Interp.hh"
 
-const char* Interp::WELCOME = "Welcome Barebone Interpreter v0.0.1";
+const char* Interp::WELCOME = "Welcome Barebone Interpreter version " BAREBONE_VERSION;
 const char* Interp::PROMPT  = ">>> ";
 
 void Interp::Run()
 {
-  while (true)
+  try
   {
-    try
+    while (true)
     {
       std::unique_ptr<ExprAST> Expression;
       Expression = m_Parser.ParseNextToken();
@@ -15,12 +15,11 @@ void Interp::Run()
         throw std::logic_error("Invalid expression");
       Expression->Execute(m_Table);
     }
-    catch (const std::exception& Ex)
-    {
-      std::cerr << Ex.what() << std::endl;
-      m_Parser.IgnoreCharacter();
-      break;
-    }
+  }
+  catch (const std::exception& Ex)
+  {
+    std::cerr << Ex.what() << std::endl;
+    m_Parser.IgnoreCharacter();
   }
 }
 
