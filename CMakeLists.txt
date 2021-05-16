@@ -1,27 +1,27 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-SET(BB_NAME Barebone)
-SET(BB_SOURCE Source)
+SET(ProgramName Barebones)
+SET(SourceFolder Sources)
 
 # Set the project name and version
-PROJECT(${BB_NAME} VERSION 0.1)
+PROJECT(${ProgramName} VERSION 0.1)
 
 # Specify the C++ standard
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Libraries
-INCLUDE_DIRECTORIES(${BB_SOURCE})
+INCLUDE_DIRECTORIES(${SourceFolder})
 
-FILE(GLOB BB_LEXER_FILES  "${BB_SOURCE}/Lexer/*.cc" )
-FILE(GLOB BB_PARSER_FILES "${BB_SOURCE}/Parser/*.cc")
-FILE(GLOB BB_INTERP_FILES "${BB_SOURCE}/Interp/*.cc")
+FILE(GLOB LexerFiles  "${SourceFolder}/Lexer/*.cc" )
+FILE(GLOB ParserFiles "${SourceFolder}/Parser/*.cc")
+FILE(GLOB InterpFiles "${SourceFolder}/Interp/*.cc")
 
-ADD_LIBRARY(BB_LEXER  ${BB_LEXER_FILES} )
-ADD_LIBRARY(BB_INTERP ${BB_INTERP_FILES})
-ADD_LIBRARY(BB_PARSER ${BB_PARSER_FILES})
+ADD_LIBRARY(Lexer  ${LexerFiles} )
+ADD_LIBRARY(Interp ${InterpFiles})
+ADD_LIBRARY(Parser ${ParserFiles} )
 
-ADD_EXECUTABLE(${BB_NAME} ${BB_SOURCE}/Master.cc)
-TARGET_LINK_LIBRARIES(BB_PARSER BB_LEXER)
-TARGET_LINK_LIBRARIES(BB_INTERP BB_PARSER)
-TARGET_LINK_LIBRARIES(${BB_NAME} BB_LEXER BB_PARSER BB_INTERP)
+ADD_EXECUTABLE(${ProgramName} ${SourceFolder}/Master.cc)
+TARGET_LINK_LIBRARIES(Parser Lexer)
+TARGET_LINK_LIBRARIES(Interp Parser)
+TARGET_LINK_LIBRARIES(${ProgramName} Lexer Parser Interp)
