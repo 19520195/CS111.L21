@@ -39,6 +39,10 @@ class Token
       GREATER_THAN      ,
       GREATER_THAN_EQUAL,
 
+      //
+      OPENING_PARENTHESES,
+      CLOSING_PARENTHESIS,
+
       // Math operators
       PLUS    ,
       MINUS   ,
@@ -52,7 +56,7 @@ class Token
       END_OF_LINE = -2,
     };
 
-    const static std::map<std::string, Token> ST_Table;
+    const static std::map<std::string, Token> StringToToken;
 
   public:
     Token() = default;
@@ -64,10 +68,11 @@ class Token
     explicit operator bool() = delete;
 
     bool IsBuiltin() const;
+    bool IsOperator() const;
 
     static Token FromString(const std::string& Name);
-    static std::string ToString(const Token& Value);
+    static std::string ToString(const Token& T);
 
   private:
-    _Token m_value;
+    _Token m_Value;
 };

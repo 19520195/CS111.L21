@@ -26,8 +26,8 @@ class Lexer
   public:
     static const char Seperator;
     static const std::string IgnoreCharter;
-    static const std::string MathOpSigns;
-    static const std::string CompareOpSigns;
+    static const std::string MathOperator;
+    static const std::string CompareOperator;
 
   private:
     char  m_LastChar;

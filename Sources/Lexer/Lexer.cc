@@ -2,8 +2,8 @@
 
 const char        Lexer::Seperator      = ';';
 const std::string Lexer::IgnoreCharter  = " \t\r\n";
-const std::string Lexer::MathOpSigns    = "+-*/";
-const std::string Lexer::CompareOpSigns = "=><!";
+const std::string Lexer::MathOperator    = "+-*/";
+const std::string Lexer::CompareOperator = "=><!";
 
 Lexer::Lexer() :
   m_LastChar(' '),
@@ -53,12 +53,31 @@ Token Lexer::ForwardToken()
   }
 
   // Binary operator
-  if (MathOpSigns.find(GetLastChar()) != std::string::npos || CompareOpSigns.find(GetLastChar()) != std::string::npos)
+  if (MathOperator.find(GetLastChar()) != std::string::npos)
   {
     m_Identifier = GetLastChar();
-    while (IgnoreCharter.find(GetNextChar()) == std::string::npos && !isalnum(GetLastChar()))
+    GetNextChar();
+    return Token::FromString(m_Identifier);
+  }
+
+  if (CompareOperator.find(GetLastChar()) != std::string::npos)
+  {
+    m_Identifier = GetLastChar();
+    if (CompareOperator.find(GetNextChar()) != std::string::npos)
       m_Identifier += GetLastChar();
     return Token::FromString(m_Identifier);
+  }
+
+  if (GetLastChar() == '(')
+  {
+    GetNextChar();
+    return Token::OPENING_PARENTHESES;
+  }
+
+  if (GetLastChar() == ')')
+  {
+    GetNextChar();
+    return Token::CLOSING_PARENTHESIS;
   }
 
   // Comments

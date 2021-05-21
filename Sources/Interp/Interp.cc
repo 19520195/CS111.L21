@@ -19,7 +19,7 @@ void Interp::Run()
   catch (const std::exception& Ex)
   {
     std::cerr << Ex.what() << std::endl;
-    m_Parser.IgnoreCharacter();
+    m_Parser.Ignore();
   }
 }
 
@@ -34,12 +34,15 @@ void Interp::Live()
       std::unique_ptr<ExprAST> Expression;
       Expression = m_Parser.ParseNextToken();
       if (Expression != nullptr)
-        Expression->Execute(m_Table);
+      {
+        unsigned int ReturnValue = ((NumberExpr*)(Expression->Execute(m_Table)).get())->GetValue();
+        std::cout << "Return: " << ReturnValue << std::endl;
+      }
     }
     catch (const std::exception& Ex)
     {
       std::cerr << Ex.what() << std::endl;
-      m_Parser.IgnoreCharacter();
+      m_Parser.Ignore();
     }
   }
 }
