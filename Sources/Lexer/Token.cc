@@ -3,48 +3,43 @@
 const std::map<std::string, Token> Token::StringToToken = std::map<std::string, Token>
 {
   // Builtin functions
-  { "incr", Token::INCR },
-  { "decr", Token::DECR },
-  { "clear", Token::CLEAR },
+  { "incr"  , Token::INCR   },
+  { "decr"  , Token::DECR   },
+  { "clear" , Token::CLEAR  },
   { "invert", Token::INVERT },
   { "assign", Token::ASSIGN },
   { "import", Token::IMPORT },
   { "export", Token::EXPORT },
   { "exporc", Token::EXPORC },
 
-  // Condition
-  { "if", Token::IF },
-  { "then", Token::THEN },
-  { "else", Token::ELSE },
-
-  // While
+  // Controllers
+  { "if"   , Token::IF    },
+  { "then" , Token::THEN  },
+  { "else" , Token::ELSE  },
   { "while", Token::WHILE },
-  { "do", Token::DO },
+  { "do"   , Token::DO    },
+  { "end"  , Token::END   },
 
-  // End
-  { "end", Token::END },
+  // Comparision operators
+  { "equal", Token::EQUAL                },
+  { "not"  , Token::NOT_EQUAL            },
+  { "="    , Token::EQUAL                },
+  { "!="   , Token::NOT_EQUAL            },
+  { "<"    , Token::LESS_THAN            },
+  { "<="   , Token::LESS_THAN_OR_EQUAL   },
+  { ">"    , Token::GREATER_THAN         },
+  { ">="   , Token::GREATER_THAN_OR_EQUAL},
 
-  // Binary operator
-  { "equal", Token::EQUAL },
-  { "not", Token::NOT },
-
-  { "=", Token::EQUAL },
-  { "!=", Token::NOT },
-  { "<", Token::LESS_THAN },
-  { "<=", Token::LESS_THAN_OR_EQUAL },
-  { ">", Token::GREATER_THAN },
-  { ">=", Token::GREATER_THAN_OR_EQUAL},
-
-  // Math operators
-  { "+", Token::PLUS },
-  { "-", Token::MINUS },
+  // Mathematic operators
+  { "+", Token::PLUS     },
+  { "-", Token::MINUS    },
   { "*", Token::MULTIPLY },
-  { "/", Token::DIVIDE },
+  { "/", Token::DIVIDE   },
 };
 
 Token::Token(const _Token& T = UNDEFINED) : m_Value(T)
 {
-  // Token::Token
+
 }
 
 Token::operator _Token() const
@@ -52,24 +47,14 @@ Token::operator _Token() const
   return m_Value;
 }
 
-bool Token::IsBuiltin() const
+bool Token::IsBuiltinFunction() const
 {
-  return m_Value == Token::INCR
-    || m_Value == Token::DECR
-    || m_Value == Token::CLEAR
-    || m_Value == Token::ASSIGN
-    || m_Value == Token::INVERT
-    || m_Value == Token::IMPORT
-    || m_Value == Token::EXPORT
-    || m_Value == Token::EXPORC;
+  return m_Value & Token::BUILTIN_FUNCTION;
 }
 
-bool Token::IsOperator() const
+bool Token::IsMathematicOperator() const
 {
-  return m_Value == Token::PLUS
-    || m_Value == Token::MINUS
-    || m_Value == Token::MULTIPLY
-    || m_Value == Token::DIVIDE;
+  return m_Value & Token::MATHEMATIC_OPERATOR;
 }
 
 Token Token::FromString(const std::string& Name)

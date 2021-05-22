@@ -21,7 +21,7 @@ std::unique_ptr<ExprAST> BinExpr::Execute(DataTable& Table)
   switch (m_Oper)
   {
     // Compare operators
-    case Token::NOT                  : return std::make_unique<NumberExpr>(GetLeftValue(Table) != GetRightValue(Table));
+    case Token::NOT_EQUAL            : return std::make_unique<NumberExpr>(GetLeftValue(Table) != GetRightValue(Table));
     case Token::EQUAL                : return std::make_unique<NumberExpr>(GetLeftValue(Table) == GetRightValue(Table));
     case Token::LESS_THAN            : return std::make_unique<NumberExpr>(GetLeftValue(Table) <  GetRightValue(Table));
     case Token::LESS_THAN_OR_EQUAL   : return std::make_unique<NumberExpr>(GetLeftValue(Table) <= GetRightValue(Table));

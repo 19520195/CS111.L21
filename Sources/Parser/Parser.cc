@@ -73,7 +73,7 @@ std::unique_ptr<ExprAST> Parser::ParseBinExpr(Precedence PreviousPrecedence, std
       return ShiftLeft;
 
     Token Operator = m_Lexer->GetLastToken();
-    if (!Operator.IsOperator())
+    if (!Operator.IsMathematicOperator())
       return ShiftLeft;
 
     m_Lexer->GetNextToken();
@@ -125,7 +125,7 @@ std::unique_ptr<ExprAST> Parser::ParseBuiltinExpr()
     throw std::logic_error("expected an identifier");
 
   std::unique_ptr<ExprAST> Expression = ParseExpression();
-  if (m_Lexer->GetLastToken() != Token::SEPERATOR)
+  if (m_Lexer->GetLastToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
   return std::make_unique<BuiltinExpr>(BuiltinToken, Identifier, std::move(Expression));
 }
@@ -135,21 +135,21 @@ std::unique_ptr<ExprAST> Parser::ParseIfExpr()
   std::unique_ptr<ExprAST> Bin = ParseBinExpr();
   if (m_Lexer->GetNextToken() != Token::THEN)
     throw std::logic_error("expected then");
-  if (m_Lexer->GetNextToken() != Token::SEPERATOR)
+  if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
 
   std::unique_ptr<ExprAST> ThenBlock = ParseBlockExpr();
   std::unique_ptr<ExprAST> ElseBlock;
   if (m_Lexer->GetLastToken() == Token::ELSE)
   {
-    if (m_Lexer->GetNextToken() != Token::SEPERATOR)
+    if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
       throw std::logic_error("expected " + Lexer::Seperator);
     ElseBlock = ParseBlockExpr();
   }
 
   if (m_Lexer->GetLastToken() != Token::END)
     throw std::logic_error("expected end");
-  if (m_Lexer->GetNextToken() != Token::SEPERATOR)
+  if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
   return std::make_unique<IfExpr>(std::move(Bin), std::move(ThenBlock), std::move(ElseBlock));
 }
@@ -159,13 +159,13 @@ std::unique_ptr<ExprAST> Parser::ParseWhileExpr()
   std::unique_ptr<ExprAST> Bin = ParseBinExpr();
   if (m_Lexer->GetNextToken() != Token::DO)
     throw std::logic_error("expected do");
-  if (m_Lexer->GetNextToken() != Token::SEPERATOR)
+  if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
 
   std::unique_ptr<ExprAST> CodeBlock = ParseBlockExpr();
   if (m_Lexer->GetLastToken() != Token::END)
     throw std::logic_error("expected end");
-  if (m_Lexer->GetNextToken() != Token::SEPERATOR)
+  if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
 
   return std::make_unique<WhileExpr>(std::move(Bin), std::move(CodeBlock));
@@ -173,7 +173,7 @@ std::unique_ptr<ExprAST> Parser::ParseWhileExpr()
 
 std::unique_ptr<ExprAST> Parser::HandleToken(Token T)
 {
-  if (T.IsBuiltin())
+  if (T.IsBuiltinFunction())
     return ParseBuiltinExpr();
 
   switch (T)

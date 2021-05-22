@@ -49,7 +49,7 @@ Token Lexer::ForwardToken()
   {
     GetNextChar();
     m_Identifier.clear();
-    return Token::SEPERATOR;
+    return Token::SEMI_COLON;
   }
 
   // Binary operator

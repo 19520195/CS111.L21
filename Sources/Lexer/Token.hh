@@ -11,48 +11,52 @@ class Token
     {
       UNDEFINED,
 
-      // Builtin functions //
-      INCR,
-      DECR,
-      CLEAR,
+      // Number & Identifer
+      NUMBER,
+      IDENTIFIER,
+
+      // Special signs
+      SEMI_COLON,
+      OPENING_PARENTHESES,
+      CLOSING_PARENTHESIS,
+
+      // Built-in functions
+      BUILTIN_FUNCTION = 0x10,
+      INCR  ,
+      DECR  ,
+      CLEAR ,
       INVERT,
       ASSIGN,
       IMPORT,
       EXPORT,
       EXPORC,
 
-      // Seperator
-      SEPERATOR,
-
-      // Loop & condition
-      IF,
-      THEN,
-      ELSE,
+      // Controller
+      CONTROLLER = 0x20,
+      IF   ,
+      THEN ,
+      ELSE ,
       WHILE,
-      DO,
-      END,
+      DO   ,
+      END  ,
 
-      // Binary operators
-      EQUAL             ,
-      NOT               ,
-      LESS_THAN         ,
+      // Comparison operators
+      COMPARISON_OPERATOR = 0x30,
+      EQUAL                ,
+      NOT_EQUAL            ,
+      LESS_THAN            ,
       LESS_THAN_OR_EQUAL   ,
-      GREATER_THAN      ,
+      GREATER_THAN         ,
       GREATER_THAN_OR_EQUAL,
 
-      //
-      OPENING_PARENTHESES,
-      CLOSING_PARENTHESIS,
-
-      // Math operators
+      // Mathematic operators
+      MATHEMATIC_OPERATOR = 0x40,
       PLUS    ,
       MINUS   ,
       MULTIPLY,
       DIVIDE  ,
 
-      NUMBER,
-      IDENTIFIER,
-
+      // Sepecial characters
       END_OF_FILE = -1,
       END_OF_LINE = -2,
     };
@@ -68,8 +72,8 @@ class Token
     operator _Token() const;
     explicit operator bool() = delete;
 
-    bool IsBuiltin() const;
-    bool IsOperator() const;
+    bool IsBuiltinFunction() const;
+    bool IsMathematicOperator() const;
 
     static Token FromString(const std::string& Name);
     static std::string ToString(const Token& T);
