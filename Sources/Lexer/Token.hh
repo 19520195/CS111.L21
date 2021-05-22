@@ -19,6 +19,7 @@ class Token
       ASSIGN,
       IMPORT,
       EXPORT,
+      EXPORC,
 
       // Seperator
       SEPERATOR,

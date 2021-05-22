@@ -42,6 +42,10 @@ std::unique_ptr<ExprAST> BuiltinExpr::Execute(DataTable& Table)
         for (auto Variable : Table)
           std::cout << Variable.first << " = " << Variable.second << std::endl;
       return std::make_unique<NumberExpr>(0);
+
+    case Token::EXPORC:
+      std::cout << (char)Table[m_Identifier] << std::endl;
+      return std::make_unique<NumberExpr>(0);
   }
 
   return std::make_unique<NumberExpr>(Table[m_Identifier]);;

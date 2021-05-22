@@ -10,6 +10,7 @@ const std::map<std::string, Token> Token::StringToToken = std::map<std::string, 
   { "assign", Token::ASSIGN },
   { "import", Token::IMPORT },
   { "export", Token::EXPORT },
+  { "exporc", Token::EXPORC },
 
   // Condition
   { "if", Token::IF },
@@ -59,7 +60,8 @@ bool Token::IsBuiltin() const
     || m_Value == Token::ASSIGN
     || m_Value == Token::INVERT
     || m_Value == Token::IMPORT
-    || m_Value == Token::EXPORT;
+    || m_Value == Token::EXPORT
+    || m_Value == Token::EXPORC;
 }
 
 bool Token::IsOperator() const
