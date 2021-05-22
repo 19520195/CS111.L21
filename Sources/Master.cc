@@ -1,16 +1,17 @@
 #include "Interp/Interp.hh"
+#include "Utilities/FlagControler.hh"
 
 int main(const int argc, const char** argv)
 {
   Interp Itp;
-  if (argc > 1)
-  {
-    freopen(argv[1], "r", stdin);
-    Itp.Run();
-  }
+  FlagControler F(argc, argv);
+
+  std::cout << F.GetFlag("File") << std::endl;
+  if (!F.GetFlag("File").length()) Itp.Live();
   else
   {
-    Itp.Live();
+    freopen(F.GetFlag("File").c_str(), "r", stdin);
+    Itp.Run();
   }
 
   return EXIT_SUCCESS;
