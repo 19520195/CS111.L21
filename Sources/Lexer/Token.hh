@@ -73,6 +73,8 @@ class Token
     explicit operator bool() = delete;
 
     bool IsBuiltinFunction() const;
+    bool IsOperator() const;
+    bool IsComparisonOperator() const;
     bool IsMathematicOperator() const;
 
     static Token FromString(const std::string& Name);

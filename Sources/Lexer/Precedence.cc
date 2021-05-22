@@ -2,10 +2,17 @@
 
 const std::map<Token, Precedence> Precedence::TokenToPrecedence = std::map<Token, Precedence>
 {
-  { Token::PLUS, Precedence::PLUS },
-  { Token::MINUS, Precedence::MINUS },
+  { Token::PLUS    , Precedence::PLUS     },
+  { Token::MINUS   , Precedence::MINUS    },
   { Token::MULTIPLY, Precedence::MULTIPLY },
-  { Token::DIVIDE, Precedence::DIVIDE },
+  { Token::DIVIDE  , Precedence::DIVIDE   },
+
+  { Token::EQUAL                , Precedence::COMPARISION },
+  { Token::NOT_EQUAL            , Precedence::COMPARISION },
+  { Token::GREATER_THAN         , Precedence::COMPARISION },
+  { Token::GREATER_THAN_OR_EQUAL, Precedence::COMPARISION },
+  { Token::LESS_THAN            , Precedence::COMPARISION },
+  { Token::LESS_THAN_OR_EQUAL   , Precedence::COMPARISION },
 
   { Token::OPENING_PARENTHESES, Precedence::NONE_HIGH },
   { Token::CLOSING_PARENTHESIS, Precedence::NONE_HIGH },
@@ -13,10 +20,19 @@ const std::map<Token, Precedence> Precedence::TokenToPrecedence = std::map<Token
 
 const std::map<std::string, Precedence> Precedence::StringToPrecedence = std::map<std::string, Precedence>
 {
-  { "+", Precedence::PLUS },
-  { "-", Precedence::MINUS },
+  { "+", Precedence::PLUS     },
+  { "-", Precedence::MINUS    },
   { "*", Precedence::MULTIPLY },
-  { "/", Precedence::DIVIDE },
+  { "/", Precedence::DIVIDE   },
+
+  { "equal", Precedence::COMPARISION },
+  { "not"  , Precedence::COMPARISION },
+  { "="    , Precedence::COMPARISION },
+  { "!="   , Precedence::COMPARISION },
+  { ">"    , Precedence::COMPARISION },
+  { ">="   , Precedence::COMPARISION },
+  { "<"    , Precedence::COMPARISION },
+  { "<="   , Precedence::COMPARISION },
 };
 
 Precedence::Precedence(const EPrecedence& P) : m_Value(P)

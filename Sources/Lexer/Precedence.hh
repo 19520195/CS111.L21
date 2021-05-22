@@ -7,14 +7,13 @@ class Precedence
   public:
     enum EPrecedence : unsigned int
     {
-      NONE_LOW = 0,
-      NONE_HIGH = 1,
-
-      PLUS     = 2000,
-      MINUS    = 2000,
-
-      MULTIPLY = 3000,
-      DIVIDE   = 3000,
+      NONE_LOW    = 0,
+      NONE_HIGH   = 1,
+      COMPARISION = 1000,
+      PLUS        = 2000,
+      MINUS       = 2000,
+      MULTIPLY    = 3000,
+      DIVIDE      = 3000,
     };
 
     static const std::map<Token, Precedence> TokenToPrecedence;

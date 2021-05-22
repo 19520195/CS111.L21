@@ -73,7 +73,7 @@ std::unique_ptr<ExprAST> Parser::ParseBinExpr(Precedence PreviousPrecedence, std
       return ShiftLeft;
 
     Token Operator = m_Lexer->GetLastToken();
-    if (!Operator.IsMathematicOperator())
+    if (!Operator.IsOperator())
       return ShiftLeft;
 
     m_Lexer->GetNextToken();

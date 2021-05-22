@@ -20,7 +20,7 @@ const std::map<std::string, Token> Token::StringToToken = std::map<std::string, 
   { "do"   , Token::DO    },
   { "end"  , Token::END   },
 
-  // Comparision operators
+  // Comparison operators
   { "equal", Token::EQUAL                },
   { "not"  , Token::NOT_EQUAL            },
   { "="    , Token::EQUAL                },
@@ -49,12 +49,22 @@ Token::operator EToken() const
 
 bool Token::IsBuiltinFunction() const
 {
-  return m_Value & Token::BUILTIN_FUNCTION;
+  return (char)m_Value & (char)Token::BUILTIN_FUNCTION;
+}
+
+bool Token::IsOperator() const
+{
+  return IsComparisonOperator() || IsMathematicOperator();
+}
+
+bool Token::IsComparisonOperator() const
+{
+  return (int)m_Value & (int)Token::COMPARISON_OPERATOR;
 }
 
 bool Token::IsMathematicOperator() const
 {
-  return m_Value & Token::MATHEMATIC_OPERATOR;
+  return (int)m_Value & (int)Token::MATHEMATIC_OPERATOR;
 }
 
 Token Token::FromString(const std::string& Name)
