@@ -46,7 +46,7 @@ std::unique_ptr<ExprAST> Parser::ParseBinExpr(Precedence PreviousPrecedence, std
 {
   for (std::unique_ptr<ExprAST> ShiftRight; ;)
   {
-    if (false) //-> expected an exception
+    if (!m_Lexer->GetLastToken().IsOperator())
       throw std::logic_error("expected a binary operator");
 
     Precedence CurrentPrecedence = Precedence::FromToken(m_Lexer->GetLastToken());
