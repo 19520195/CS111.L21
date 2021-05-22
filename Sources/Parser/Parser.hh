@@ -19,7 +19,6 @@ class Parser
     std::unique_ptr<ExprAST> ParsePrimary();
     std::unique_ptr<ExprAST> ParseParenthesesExpr();
 
-    std::unique_ptr<ExprAST> ParseBinExpr();
     std::unique_ptr<ExprAST> ParseBinExpr(Precedence Value, std::unique_ptr<ExprAST> ShiftLeft);
 
     std::unique_ptr<ExprAST> ParseBlockExpr();

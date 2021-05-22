@@ -42,25 +42,6 @@ std::unique_ptr<ExprAST> Parser::ParseParenthesesExpr()
   return Expression;
 }
 
-std::unique_ptr<ExprAST> Parser::ParseBinExpr()
-{
-  m_Lexer->GetNextToken();
-  std::unique_ptr<ExprAST> Left = ParsePrimary();
-  if (Left == nullptr)
-    throw std::logic_error("Left side is undefined");
-
-  Token Oper = m_Lexer->GetNextToken();
-  if (Oper == Token::IDENTIFIER)
-    throw std::logic_error("Undefined operator " + m_Lexer->GetIdentifierValue());
-
-  m_Lexer->GetNextToken();
-  std::unique_ptr<ExprAST> Right = ParsePrimary();;
-  if (Left == nullptr)
-    throw std::logic_error("Right side is undefined");
-
-  return std::make_unique<BinExpr>(Oper, std::move(Left), std::move(Right));
-}
-
 std::unique_ptr<ExprAST> Parser::ParseBinExpr(Precedence PreviousPrecedence, std::unique_ptr<ExprAST> ShiftLeft)
 {
   for (std::unique_ptr<ExprAST> ShiftRight; ;)
@@ -132,14 +113,14 @@ std::unique_ptr<ExprAST> Parser::ParseBuiltinExpr()
 
 std::unique_ptr<ExprAST> Parser::ParseIfExpr()
 {
-  std::unique_ptr<ExprAST> Bin = ParseBinExpr();
-  if (m_Lexer->GetNextToken() != Token::THEN)
+  std::unique_ptr<ExprAST> Bin = ParseExpression();
+  if (m_Lexer->GetLastToken() != Token::THEN)
     throw std::logic_error("expected then");
   if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
 
   std::unique_ptr<ExprAST> ThenBlock = ParseBlockExpr();
-  std::unique_ptr<ExprAST> ElseBlock;
+  std::unique_ptr<ExprAST> ElseBlock = nullptr;
   if (m_Lexer->GetLastToken() == Token::ELSE)
   {
     if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
@@ -156,8 +137,8 @@ std::unique_ptr<ExprAST> Parser::ParseIfExpr()
 
 std::unique_ptr<ExprAST> Parser::ParseWhileExpr()
 {
-  std::unique_ptr<ExprAST> Bin = ParseBinExpr();
-  if (m_Lexer->GetNextToken() != Token::DO)
+  std::unique_ptr<ExprAST> Bin = ParseExpression();
+  if (m_Lexer->GetLastToken() != Token::DO)
     throw std::logic_error("expected do");
   if (m_Lexer->GetNextToken() != Token::SEMI_COLON)
     throw std::logic_error("expected " + Lexer::Seperator);
