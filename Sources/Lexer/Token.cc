@@ -31,9 +31,9 @@ const std::map<std::string, Token> Token::StringToToken = std::map<std::string, 
   { "=", Token::EQUAL },
   { "!=", Token::NOT },
   { "<", Token::LESS_THAN },
-  { "<=", Token::LESS_THAN_EQUAL },
+  { "<=", Token::LESS_THAN_OR_EQUAL },
   { ">", Token::GREATER_THAN },
-  { ">=", Token::GREATER_THAN_EQUAL},
+  { ">=", Token::GREATER_THAN_OR_EQUAL},
 
   // Math operators
   { "+", Token::PLUS },
