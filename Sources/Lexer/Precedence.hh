@@ -5,7 +5,7 @@
 class Precedence
 {
   public:
-    enum _Precedence : unsigned int
+    enum EPrecedence : unsigned int
     {
       NONE_LOW = 0,
       NONE_HIGH = 1,
@@ -24,10 +24,10 @@ class Precedence
     Precedence() = default;
     ~Precedence() = default;
 
-    Precedence(const _Precedence& P);
+    Precedence(const EPrecedence& P);
     Precedence(const unsigned int& U);
 
-    operator _Precedence() const;
+    operator EPrecedence() const;
     explicit operator bool() = delete;
 
     bool operator<(const Precedence& ShiftRight);

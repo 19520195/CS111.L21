@@ -37,12 +37,12 @@ const std::map<std::string, Token> Token::StringToToken = std::map<std::string, 
   { "/", Token::DIVIDE   },
 };
 
-Token::Token(const _Token& T = UNDEFINED) : m_Value(T)
+Token::Token(const EToken& T = UNDEFINED) : m_Value(T)
 {
 
 }
 
-Token::operator _Token() const
+Token::operator EToken() const
 {
   return m_Value;
 }

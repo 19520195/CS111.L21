@@ -7,7 +7,7 @@
 class Token
 {
   public:
-    enum _Token : char
+    enum EToken : char
     {
       UNDEFINED,
 
@@ -67,9 +67,9 @@ class Token
     Token() = default;
     ~Token() = default;
 
-    Token(const _Token& T);
+    Token(const EToken& T);
 
-    operator _Token() const;
+    operator EToken() const;
     explicit operator bool() = delete;
 
     bool IsBuiltinFunction() const;
@@ -79,5 +79,5 @@ class Token
     static std::string ToString(const Token& T);
 
   private:
-    _Token m_Value;
+    EToken m_Value;
 };

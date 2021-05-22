@@ -19,7 +19,7 @@ const std::map<std::string, Precedence> Precedence::StringToPrecedence = std::ma
   { "/", Precedence::DIVIDE },
 };
 
-Precedence::Precedence(const _Precedence& P) : m_Value(P)
+Precedence::Precedence(const EPrecedence& P) : m_Value(P)
 {
 
 }
@@ -29,9 +29,9 @@ Precedence::Precedence(const unsigned int& U) : m_Value(U)
 
 }
 
-Precedence::operator _Precedence() const
+Precedence::operator EPrecedence() const
 {
-  return (_Precedence)(m_Value % 1000);
+  return (EPrecedence)(m_Value % 1000);
 }
 
 bool Precedence::operator<(const Precedence& ShiftRight)
@@ -63,7 +63,7 @@ std::string Precedence::ToString(const Precedence& P)
     StringToPrecedence.end(),
     [P](const auto& I)
     {
-      return I.second == (_Precedence)(P.m_Value / 1000 * 1000);
+      return I.second == (EPrecedence)(P.m_Value / 1000 * 1000);
     }
   );
 
