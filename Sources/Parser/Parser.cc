@@ -121,22 +121,12 @@ std::unique_ptr<ExprAST> Parser::ParseBuiltinExpr()
   const Token BuiltinToken = m_Lexer->GetLastToken();
   const std::string Identifier = m_Lexer->GetNextIdentifier();
 
-  if (BuiltinToken == Token::EXPORT && m_Lexer->GetLastToken() == Token::SEPERATOR)
-    return std::make_unique<BuiltinExpr>(BuiltinToken, Identifier, nullptr);
-
   if (m_Lexer->GetLastToken() != Token::IDENTIFIER)
     throw std::logic_error("expected an identifier");
 
-  std::unique_ptr<ExprAST> Expression = nullptr;
-  if (BuiltinToken == Token::ASSIGN)
-    Expression = ParseExpression();
-  else
-    m_Lexer->GetNextToken();
-
-  if (Identifier.length())
-    if (m_Lexer->GetLastToken() != Token::SEPERATOR)
-      throw std::logic_error("expected " + Lexer::Seperator);
-
+  std::unique_ptr<ExprAST> Expression = ParseExpression();
+  if (m_Lexer->GetLastToken() != Token::SEPERATOR)
+    throw std::logic_error("expected " + Lexer::Seperator);
   return std::make_unique<BuiltinExpr>(BuiltinToken, Identifier, std::move(Expression));
 }
 

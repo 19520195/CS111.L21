@@ -37,10 +37,19 @@ std::unique_ptr<ExprAST> BuiltinExpr::Execute(DataTable& Table)
       break;
 
     case Token::EXPORT:
-      if (m_Identifier.length()) std::cout << m_Identifier << " = " << Table[m_Identifier] << std::endl;
+      if (!(m_Identifier == "all"))
+      {
+        std::cout << m_Identifier << " = ";
+        std::cout << Table[m_Identifier] << std::endl;
+      }
       else
+      {
         for (auto Variable : Table)
-          std::cout << Variable.first << " = " << Variable.second << std::endl;
+        {
+          std::cout << Variable.first << " = ";
+          std::cout << Variable.second << std::endl;
+        }
+      }
       return std::make_unique<NumberExpr>(0);
 
     case Token::EXPORC:
