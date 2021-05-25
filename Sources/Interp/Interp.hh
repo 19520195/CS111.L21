@@ -15,6 +15,7 @@ class Interp
     ~Interp() = default;
 
     Interp(const DataTable& Table);
+    Interp(const std::string& Filename, const DataTable& Table);
 
     void Run();
     void Live();

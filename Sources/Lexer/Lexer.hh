@@ -11,7 +11,8 @@ class Lexer
     Token ForwardToken();
 
   public:
-    Lexer();
+    Lexer(std::istream& Input = std::cin);
+    ~Lexer();
 
     char GetNextChar();
     Token GetNextToken();
@@ -35,4 +36,6 @@ class Lexer
 
     unsigned int m_Number;
     std::string  m_Identifier;
+
+    std::unique_ptr<std::istream> m_Input;
 };

@@ -5,16 +5,22 @@ const std::string Lexer::IgnoreCharter  = " \t\r\n";
 const std::string Lexer::MathOperator    = "+-*/";
 const std::string Lexer::CompareOperator = "=><!";
 
-Lexer::Lexer() :
+Lexer::Lexer(std::istream& Input) :
   m_LastChar(' '),
   m_LastToken(Token::UNDEFINED),
-  m_Number(0)
+  m_Number(0),
+  m_Input(&Input)
 {
+}
+
+Lexer::~Lexer()
+{
+  m_Input.release();
 }
 
 char Lexer::ForwardChar()
 {
-  return std::cin.get();
+  return m_Input->get();
 }
 
 Token Lexer::ForwardToken()

@@ -16,15 +16,19 @@ int main(const int ArgumentCounter, const char** ArgumentValue)
     return std::cout << Flags.Help() << std::endl, EXIT_SUCCESS;
 
   DataTable Table;
-  std::cout << Flags.GetFlag("set");
 
   // Create interpreter
-  Interp Interpreter;
-  if (!Flags.GetFlag("file").length()) Interpreter.Live();
-  else
+  try
   {
-    freopen(Flags.GetFlag("file").c_str(), "r", stdin);
-    Interpreter.Run();
+    if (!Flags.GetFlag("file").length())
+      Interp().Live();
+    else
+      Interp(Flags.GetFlag("file"), Table).Run();
+  }
+  catch(const std::exception& Exception)
+  {
+    std::cout << Exception.what() << std::endl;
+    return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;

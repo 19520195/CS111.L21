@@ -10,6 +10,14 @@ Parser::Parser(std::unique_ptr<Lexer> L) : m_Lexer(std::move(L))
   // Parser::Parser
 }
 
+Parser::Parser(const std::string& Filename)
+{
+  m_Input = std::make_unique<std::ifstream>(Filename);
+  if (m_Input->is_open() == false)
+    throw std::logic_error("can not open file " + Filename);
+  m_Lexer = std::make_unique<Lexer>(*m_Input.get());
+}
+
 std::unique_ptr<ExprAST> Parser::ParseNumberExpr()
 {
   return std::make_unique<NumberExpr>(m_Lexer->GetNumberValue());

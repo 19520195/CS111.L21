@@ -3,8 +3,11 @@
 const char* Interp::WELCOME = "Welcome Barebone Interpreter version " BAREBONE_VERSION;
 const char* Interp::PROMPT  = ">>> ";
 
-
 Interp::Interp(const DataTable& Table) : m_Table(Table)
+{
+}
+
+Interp::Interp(const std::string& Filename, const DataTable& Table) : m_Parser(Filename), m_Table(Table)
 {
 }
 

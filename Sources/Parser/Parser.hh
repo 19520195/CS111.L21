@@ -3,6 +3,8 @@
 #include "Lexer/Lexer.hh"
 #include "Lexer/Precedence.hh"
 #include "ExprAST.hh"
+
+#include <fstream>
 #include <memory>
 
 class Parser
@@ -12,6 +14,7 @@ class Parser
 
     Parser();
     Parser(std::unique_ptr<Lexer> L);
+    Parser(const std::string& Filename);
 
     std::unique_ptr<ExprAST> ParseNumberExpr();
     std::unique_ptr<ExprAST> ParseIdentifierExpr();
@@ -35,4 +38,5 @@ class Parser
 
   private:
     std::unique_ptr<Lexer> m_Lexer;
+    std::unique_ptr<std::ifstream> m_Input;
 };
