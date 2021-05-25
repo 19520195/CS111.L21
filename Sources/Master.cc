@@ -1,17 +1,30 @@
 #include "Interp/Interp.hh"
-#include "Utilities/FlagControler.hh"
+#include "Utilities/FlagController.hh"
 
-int main(const int argc, const char** argv)
+int main(const int ArgumentCounter, const char** ArgumentValue)
 {
-  Interp Itp;
-  FlagControler F(argc, argv);
+  // Flag parsing
+  try { Flags.ParseFlag(ArgumentCounter, ArgumentValue); }
+  catch(const std::exception& Exception)
+  {
+    std::cout << Exception.what() << std::endl;
+    return EXIT_FAILURE;
+  }
 
-  std::cout << F.GetFlag("File") << std::endl;
-  if (!F.GetFlag("File").length()) Itp.Live();
+  // Helping flag
+  if (Flags.ExistFlag("help"))
+    return std::cout << Flags.Help() << std::endl, EXIT_SUCCESS;
+
+  DataTable Table;
+  std::cout << Flags.GetFlag("set");
+
+  // Create interpreter
+  Interp Interpreter;
+  if (!Flags.GetFlag("file").length()) Interpreter.Live();
   else
   {
-    freopen(F.GetFlag("File").c_str(), "r", stdin);
-    Itp.Run();
+    freopen(Flags.GetFlag("file").c_str(), "r", stdin);
+    Interpreter.Run();
   }
 
   return EXIT_SUCCESS;

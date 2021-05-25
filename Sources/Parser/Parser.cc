@@ -47,7 +47,11 @@ std::unique_ptr<ExprAST> Parser::ParseBinExpr(Precedence PreviousPrecedence, std
   for (std::unique_ptr<ExprAST> ShiftRight; ;)
   {
     if (!m_Lexer->GetLastToken().IsOperator())
+    {
+      if (m_Lexer->GetLastToken() == Token::SEMI_COLON)
+        return ShiftLeft;
       throw std::logic_error("expected a binary operator");
+    }
 
     Precedence CurrentPrecedence = Precedence::FromToken(m_Lexer->GetLastToken());
     if (CurrentPrecedence < PreviousPrecedence)

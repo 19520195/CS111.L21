@@ -14,6 +14,8 @@ class Interp
     Interp() = default;
     ~Interp() = default;
 
+    Interp(const DataTable& Table);
+
     void Run();
     void Live();
 

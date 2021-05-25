@@ -1,4 +1,4 @@
 ADD_LIBRARY(
   Utilities
-  FlagControler.cc
+  FlagController.cc
 )
