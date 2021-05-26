@@ -10,6 +10,8 @@ class BinExpr : public ExprAST
 
     unsigned int GetLeftValue(DataTable& Table);
     unsigned int GetRightValue(DataTable& Table);
+
+    std::string GenerateCode() const;
     std::unique_ptr<ExprAST> Execute(DataTable& Table);
 
   private:

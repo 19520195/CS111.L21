@@ -2,7 +2,11 @@
 
 NumberExpr::NumberExpr(const unsigned int& Value) : m_Value(Value)
 {
-  // NumberExpr::NumberExpr
+}
+
+std::string NumberExpr::GenerateCode() const
+{
+  return std::to_string(m_Value);
 }
 
 std::unique_ptr<ExprAST> NumberExpr::Execute(DataTable& Table)

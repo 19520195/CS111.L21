@@ -2,7 +2,11 @@
 
 VariableExpr::VariableExpr(const std::string& Name) : m_Name(Name)
 {
-  // VariableExpr::VariableExpr
+}
+
+std::string VariableExpr::GenerateCode() const
+{
+  return m_Name;
 }
 
 std::unique_ptr<ExprAST> VariableExpr::Execute(DataTable& Table)

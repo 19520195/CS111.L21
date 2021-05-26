@@ -6,6 +6,8 @@ class IfExpr : public ExprAST
 {
   public:
     IfExpr(std::unique_ptr<ExprAST> Condition, std::unique_ptr<ExprAST> CodeBlock, std::unique_ptr<ExprAST> ElseBlock);
+
+    std::string GenerateCode() const;
     std::unique_ptr<ExprAST> Execute(DataTable& Table);
 
   protected:

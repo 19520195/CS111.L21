@@ -16,6 +16,16 @@ unsigned int BinExpr::GetRightValue(DataTable& Table)
   return ((NumberExpr*)(m_Right->Execute(Table).get()))->GetValue();
 }
 
+std::string BinExpr::GenerateCode() const
+{
+  return
+  "(" +
+    m_Left->GenerateCode()  +
+    Token::ToString(m_Oper) +
+    m_Right->GenerateCode() +
+  ")";
+}
+
 std::unique_ptr<ExprAST> BinExpr::Execute(DataTable& Table)
 {
   switch (m_Oper)
