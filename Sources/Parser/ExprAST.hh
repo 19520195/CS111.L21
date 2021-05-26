@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Lexer/Token.hh"
-#include "Interp/DataTable.hh"
+#include "Interpreter/DataTable.hh"
 #include <memory>
 
 class ExprAST

@@ -1,4 +1,4 @@
-#include "Interp/Interp.hh"
+#include "Interpreter/Interpreter.hh"
 #include "Utilities/FlagController.hh"
 
 int main(const int ArgumentCounter, const char** ArgumentValue)
@@ -21,9 +21,9 @@ int main(const int ArgumentCounter, const char** ArgumentValue)
   try
   {
     if (!Flags.GetFlag("file").length())
-      Interp().Live();
+      Interpreter().Live();
     else
-      Interp(Flags.GetFlag("file"), Table).Run();
+      Interpreter(Flags.GetFlag("file"), Table).Run();
   }
   catch(const std::exception& Exception)
   {

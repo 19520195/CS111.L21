@@ -8,14 +8,14 @@
 #include <iostream>
 #include <fstream>
 
-class Interp
+class Interpreter
 {
   public:
-    Interp() = default;
-    ~Interp() = default;
+    Interpreter() = default;
+    ~Interpreter() = default;
 
-    Interp(const DataTable& Table);
-    Interp(const std::string& Filename, const DataTable& Table);
+    Interpreter(const DataTable& Table);
+    Interpreter(const std::string& Filename, const DataTable& Table);
 
     void Run();
     void Live();
