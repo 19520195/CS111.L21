@@ -22,3 +22,11 @@ std::unique_ptr<ExprAST> IfExpr::Execute(DataTable& Table)
     return std::make_unique<NumberExpr>(0);
   return m_ElseBlock->Execute(Table);
 }
+
+void IfExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+  m_Condition->LookupVaribale(Set);
+  m_CodeBlock->LookupVaribale(Set);
+  if (m_ElseBlock != nullptr)
+    m_ElseBlock->LookupVaribale(Set);
+}

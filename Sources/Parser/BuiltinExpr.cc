@@ -75,3 +75,8 @@ std::unique_ptr<ExprAST> BuiltinExpr::Execute(DataTable& Table)
 
   return std::make_unique<NumberExpr>(Table[m_Identifier]);;
 }
+
+void BuiltinExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+  Set.insert(m_Identifier);
+}

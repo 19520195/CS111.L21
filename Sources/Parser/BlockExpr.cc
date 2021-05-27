@@ -20,3 +20,9 @@ std::unique_ptr<ExprAST> BlockExpr::Execute(DataTable& Table)
     ReturnedExpr = Expr->Execute(Table);
   return ReturnedExpr;
 }
+
+void BlockExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+  for (const auto& Expr : m_Exprs)
+    Expr->LookupVaribale(Set);
+}

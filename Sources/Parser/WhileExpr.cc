@@ -7,8 +7,8 @@ WhileExpr::WhileExpr(std::unique_ptr<ExprAST> Condition, std::unique_ptr<ExprAST
 
 std::string WhileExpr::GenerateCode() const
 {
-  std::string Codes = "if " + m_Condition->GenerateCode() + "\n";
-  Codes += "{\n" + m_CodeBlock->GenerateCode(); "}\n";
+  std::string Codes = "while" + m_Condition->GenerateCode() + "\n";
+  Codes += "{\n" + m_CodeBlock->GenerateCode() + "}\n";
   return Codes;
 }
 
@@ -18,4 +18,10 @@ std::unique_ptr<ExprAST> WhileExpr::Execute(DataTable& Table)
   while (((NumberExpr*)(m_Condition->Execute(Table).get()))->GetValue())
     LastExpr = std::move(m_CodeBlock->Execute(Table));
   return LastExpr;
+}
+
+void WhileExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+  m_Condition->LookupVaribale(Set);
+  m_CodeBlock->LookupVaribale(Set);
 }

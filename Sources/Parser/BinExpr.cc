@@ -48,3 +48,9 @@ std::unique_ptr<ExprAST> BinExpr::Execute(DataTable& Table)
       return nullptr;
   }
 }
+
+void BinExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+  m_Left->LookupVaribale(Set);
+  m_Right->LookupVaribale(Set);
+}

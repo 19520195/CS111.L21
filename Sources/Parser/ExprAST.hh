@@ -3,6 +3,7 @@
 #include "Lexer/Token.hh"
 #include "Interpreter/DataTable.hh"
 
+#include <set>
 #include <sstream>
 #include <string>
 #include <memory>
@@ -13,6 +14,7 @@ class ExprAST
     virtual ~ExprAST() = default;
     virtual std::string GenerateCode() const = 0;
     virtual std::unique_ptr<ExprAST> Execute(DataTable& Table) = 0;
+    virtual void LookupVaribale(std::set<std::string>& Set) const = 0;
 };
 
 #include "NumberExpr.hh"

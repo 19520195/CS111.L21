@@ -14,6 +14,10 @@ std::unique_ptr<ExprAST> NumberExpr::Execute(DataTable& Table)
   return std::make_unique<NumberExpr>(m_Value);
 }
 
+void NumberExpr::LookupVaribale(std::set<std::string>& Set) const
+{
+}
+
 unsigned int NumberExpr::GetValue() const
 {
   return m_Value;

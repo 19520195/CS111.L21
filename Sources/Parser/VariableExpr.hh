@@ -9,6 +9,7 @@ class VariableExpr : public ExprAST
 
     std::string GenerateCode() const;
     std::unique_ptr<ExprAST> Execute(DataTable& Table);
+    void LookupVaribale(std::set<std::string>& Set) const;
 
     std::string GetValue() const;
 

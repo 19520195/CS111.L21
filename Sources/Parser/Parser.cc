@@ -181,7 +181,7 @@ std::unique_ptr<ExprAST> Parser::ParseNextToken()
 {
   Token CurrentToken = m_Lexer->GetNextToken();
   if (CurrentToken == Token::END_OF_FILE)
-    exit(EXIT_SUCCESS);
+    return nullptr;
   return HandleToken(CurrentToken);
 }
 

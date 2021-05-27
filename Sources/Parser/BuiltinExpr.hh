@@ -11,6 +11,7 @@ class BuiltinExpr : public ExprAST
 
     std::string GenerateCode() const;
     std::unique_ptr<ExprAST> Execute(DataTable& Table);
+    void LookupVaribale(std::set<std::string>& Set) const;
 
   private:
     Token                    m_Token;
