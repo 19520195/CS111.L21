@@ -10,14 +10,14 @@ std::string BuiltinExpr::GenerateCode() const
 {
   switch (m_Token)
   {
-    case Token::INCR  : return "++" + m_Identifier + ";";
-    case Token::DECR  : return "--" + m_Identifier + ";";
-    case Token::CLEAR : return m_Identifier + " = 0;";
-    case Token::INVERT: return m_Identifier + " = !" + m_Identifier + ";";
-    case Token::ASSIGN: return m_Identifier + " = " + m_Expression->GenerateCode() + ";";
+    case Token::INCR  : return "++" + m_Identifier;
+    case Token::DECR  : return "--" + m_Identifier;
+    case Token::CLEAR : return m_Identifier + "=0";
+    case Token::INVERT: return m_Identifier + "=!" + m_Identifier;
+    case Token::ASSIGN: return m_Identifier + "=" + m_Expression->GenerateCode();
 
-    case Token::IMPORT: return "printf(\"" + m_Identifier + " = \"); scanf(\"%d\", &" + m_Identifier + ");";
-    case Token::EXPORT: return "printf(\"" + m_Identifier + " = %d\", " + m_Identifier + ");";
+    case Token::IMPORT: return "std::cout<<\"" + m_Identifier + " = \";std::cin>>" + m_Identifier;
+    case Token::EXPORT: return "std::cout<<\"" + m_Identifier + " = \"<<" + m_Identifier;
     default:            return "__unknow_statement__";
   }
 }
