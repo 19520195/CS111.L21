@@ -13,14 +13,14 @@ Interpreter::Interpreter(const std::string& Filename, const DataTable& Table) : 
 
 void Interpreter::Run()
 {
+  std::unique_ptr<ExprAST> Expression;
   try
   {
     while (true)
     {
-      std::unique_ptr<ExprAST> Expression;
       Expression = m_Parser.ParseNextToken();
       if (Expression == nullptr)
-        throw std::logic_error("Invalid expression");
+        break;
       Expression->Execute(m_Table);
     }
   }
