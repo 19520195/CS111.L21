@@ -46,5 +46,6 @@ void Compiler::Compile(const std::string& Output)
   LinkerFile << GenerateCode() << std::endl;
   LinkerFile.close();
 
-  system(("g++ " + LinkerFilename + " -o " + Output).c_str());
+  if (system(("g++ " + LinkerFilename + " -o " + Output).c_str()) != EXIT_SUCCESS)
+    throw std::logic_error("unexpected error when run g++");
 }
