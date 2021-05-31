@@ -1,12 +1,11 @@
-
 import os
 from tkinter.ttk import *
 from tkinter import *
 from time import sleep
 
 main_application = Tk()
-main_application.geometry('1200x800')
-main_application.title('IDE for BareBones')
+main_application.geometry("1200x800")
+main_application.title("IDE for BareBones")
 
 #################### MAIN MENU ########################
 main_menu=Menu()
@@ -15,12 +14,12 @@ def config_color(keys, Clr):
     for word in keys :
         matches = 0
         if word:
-            start_pos = '1.0'
+            start_pos = "1.0"
             while True:
                 start_pos = textWriteCode.search(word, start_pos, stopindex=END)
                 if not start_pos:
                     break 
-                end_pos = f'{start_pos}+{len(word)}c'
+                end_pos = f"{start_pos}+{len(word)}c"
                 textWriteCode.tag_add(Clr, start_pos, end_pos)
                 matches += 1
                 start_pos = end_pos
@@ -58,12 +57,12 @@ find_icon=PhotoImage(file="./Icons/find.png")
 edit=Menu(main_menu, tearoff=False)
 
 #-------------------------------window---------------------#
-light_default_icon=PhotoImage(file='./Icons/light_default.png')
-light_plus_icon=PhotoImage(file='./Icons/light_plus.png')
-dark_icon=PhotoImage(file='./Icons/dark.png')
-red_icon=PhotoImage(file='./Icons/red.png')
-monokai_icon=PhotoImage(file='./Icons/monokai.png')
-night_icon=PhotoImage(file='./Icons/night_blue.png')
+light_default_icon=PhotoImage(file="./Icons/light_default.png")
+light_plus_icon=PhotoImage(file="./Icons/light_plus.png")
+dark_icon=PhotoImage(file="./Icons/dark.png")
+red_icon=PhotoImage(file="./Icons/red.png")
+monokai_icon=PhotoImage(file="./Icons/monokai.png")
+night_icon=PhotoImage(file="./Icons/night_blue.png")
 
 color_theme=Menu(main_menu, tearoff=False)
 
@@ -71,12 +70,12 @@ theme_choice=StringVar()
 color_Icons=(light_default_icon,light_plus_icon,dark_icon,red_icon,monokai_icon,night_icon)
 
 color_dict={
-    'Light Default':('#000000','#ffffff'),
-    'Light Plus':('#474747','e0e0e0'),
-    'Dark':('#c4c4c4','#2d2d2d'),
-    'Red':('#2d2d2d','#ffe8e8'),
-    "Monokai":('#d3b774','#474747'),
-    'Night Blue':('#ededed','#6b9dc2')
+    "Light Default":("#000000","#ffffff"),
+    "Light Plus":("#474747","e0e0e0"),
+    "Dark":("#c4c4c4","#2d2d2d"),
+    "Red":("#2d2d2d","#ffe8e8"),
+    "Monokai":("#d3b774","#474747"),
+    "Night Blue":("#ededed","#6b9dc2")
 }
 
 
@@ -98,16 +97,16 @@ tool_bar.pack(side=TOP,fill=X)
 ##font box
 font_tuple=font.families()
 font_family=StringVar()
-font_box=Combobox(tool_bar,width=30,textvariable=font_family,state='readonly')
-font_box['values']=font_tuple
-font_box.current(font_tuple.index('Times New Roman'))
+font_box=Combobox(tool_bar,width=30,textvariable=font_family,state="readonly")
+font_box["values"]=font_tuple
+font_box.current(font_tuple.index("Times New Roman"))
 font_box.grid(row=0,column=0,padx=5)
 
 
 #size box
 size_var=IntVar()
-font_size=Combobox(tool_bar, width=14,textvariable=size_var, state='readonly')
-font_size['values']=tuple(range(8,80,2))
+font_size=Combobox(tool_bar, width=14,textvariable=size_var, state="readonly")
+font_size["values"]=tuple(range(8,80,2))
 font_size.current(4)
 font_size.grid(row=0,column=1,padx=5)
 
@@ -136,7 +135,7 @@ yscrollbar.config(command=textWriteCode.yview)
 
 
 ######## font family and font size functionality
-current_font_family='Times New Roman'
+current_font_family="Times New Roman"
 current_font_size=13
 
 def change_font(main_application):
@@ -149,35 +148,35 @@ def change_fontsize(main_application):
     current_font_size= size_var.get()
     textWriteCode.configure(font=(current_font_family,current_font_size))
 
-font_box.bind('<<ComboboxSelected>>',change_font)
-font_size.bind('<<ComboboxSelected>>',change_fontsize)
+font_box.bind("<<ComboboxSelected>>",change_font)
+font_size.bind("<<ComboboxSelected>>",change_fontsize)
 
 
-# textWriteCode.configure(font=('Times New Roman',13))
+# textWriteCode.configure(font=("Times New Roman",13))
 #&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& END OF TEXT EDITOR &&&&&&&&&&&&&&&&&&&&&&&
 
 
 #######################################################   main menu functionality #####################
 
 
-url=''           #GLOBAL VARIABLE
+url=""           #GLOBAL VARIABLE
 
 #NEW FILE FUNCTIONALITY
 def new_file(event=None):
     global url
-    url=''
+    url=""
     textWriteCode.delete(1.0,END)
     main_application.title("New file")
 
-file.add_command(label="NEW",image=new_icon,compound=LEFT,accelerator='CTRL+N',command=new_file)
+file.add_command(label="NEW",image=new_icon,compound=LEFT,accelerator="CTRL+N",command=new_file)
 
 
 #OPEN FUNCTIONALITY
 def open_file(event=None):
     global url
-    url=filedialog.askopenfilename(title='Select File',filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
+    url=filedialog.askopenfilename(title="Select File",filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
     try:
-        with open(url,'r') as fr:
+        with open(url,"r") as fr:
             textWriteCode.delete(1.0,END)
             textWriteCode.insert(1.0,fr.read())
             auto_color()
@@ -194,12 +193,12 @@ def save_file(event=None):
     try:
         if url:
             content= str(textWriteCode.get(1.0,END))
-            with open(url,'w',encoding='utf-8') as fw:
+            with open(url,"w",encoding="utf-8") as fw:
                 fw.write(content)
             main_application.title(os.path.basename(url))
             
         else:
-            url = filedialog.asksaveasfilename(title='Select File', filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
+            url = filedialog.asksaveasfilename(title="Select File", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
             fo = open(url,"w")
             code = textWriteCode.get("1.0",END)
             fo.write(code)
@@ -219,7 +218,7 @@ def save_as(event=None):
     global url
     try:
         content=textWriteCode.get(1.0,END)
-        url=filedialog.asksaveasfile(mode='w',defaultextension='.txt',filetypes=(('Text File','*.txt'),('All files','*.*')))
+        url=filedialog.asksaveasfile(mode="w",defaultextension=".txt",filetypes=(("Text File","*.txt"),("All files","*.*")))
         url.write(content)
         url.close()
     except:
@@ -234,16 +233,16 @@ def exit_func(event=None):
     global url, text_changed
     try:
         if text_changed:
-            mbox = messagebox.askyesnocancel('Warning', 'Do you want to save the file ?')
+            mbox = messagebox.askyesnocancel("Warning", "Do you want to save the file ?")
             if mbox is True:
                 if url:
                     content = textWriteCode.get(1.0, END)
-                    with open(url, 'w', encoding='utf-8') as fw:
+                    with open(url, "w", encoding="utf-8") as fw:
                         fw.write(content)
                         main_application.destroy()
                 else:
                     content2 = str(textWriteCode.get(1.0, END))
-                    url = filedialog.asksaveasfile(mode = 'w', defaultextension='.txt', filetypes=(('Text File', '*.txt'), ('All files', '*.*')))
+                    url = filedialog.asksaveasfile(mode = "w", defaultextension=".txt", filetypes=(("Text File", "*.txt"), ("All files", "*.*")))
                     url.write(content2)
                     url.close()
                     main_application.destroy()
@@ -253,7 +252,7 @@ def exit_func(event=None):
             main_application.destroy()
     except:
         return 
-file.add_command(label='Exit', image=exit_icon, compound=LEFT, accelerator='Ctrl+Q', command=exit_func)
+file.add_command(label="Exit", image=exit_icon, compound=LEFT, accelerator="Ctrl+Q", command=exit_func)
 
 
 ## edit tab
@@ -264,19 +263,19 @@ def find_func(event=None):
 
     def find():
         word = find_input.get()
-        textWriteCode.tag_remove('match', '1.0', END)
+        textWriteCode.tag_remove("match", "1.0", END)
         matches = 0
         if word:
-            start_pos = '1.0'
+            start_pos = "1.0"
             while True:
                 start_pos = textWriteCode.search(word, start_pos, stopindex=END)
                 if not start_pos:
                     break 
-                end_pos = f'{start_pos}+{len(word)}c'
-                textWriteCode.tag_add('match', start_pos, end_pos)
+                end_pos = f"{start_pos}+{len(word)}c"
+                textWriteCode.tag_add("match", start_pos, end_pos)
                 matches += 1
                 start_pos = end_pos
-                textWriteCode.tag_config('match', foreground='red', background='yellow')
+                textWriteCode.tag_config("match", foreground="red", background="yellow")
     
     def replace():
         word = find_input.get()
@@ -287,25 +286,25 @@ def find_func(event=None):
         textWriteCode.insert(1.0, new_content)
 
     find_dialogue = Toplevel()
-    find_dialogue.geometry('450x250+500+200')
-    find_dialogue.title('Find')
+    find_dialogue.geometry("450x250+500+200")
+    find_dialogue.title("Find")
     find_dialogue.resizable(0,0)
 
     ## frame 
-    find_frame = tLabelFrame(find_dialogue, text='Find/Replace')
+    find_frame = tLabelFrame(find_dialogue, text="Find/Replace")
     find_frame.pack(pady=20)
 
     ## labels
-    text_find_label = tLabel(find_frame, text='Find : ')
-    text_replace_label = tLabel(find_frame, text= 'Replace')
+    text_find_label = tLabel(find_frame, text="Find : ")
+    text_replace_label = tLabel(find_frame, text= "Replace")
 
     ## entry 
     find_input = tEntry(find_frame, width=30)
     replace_input = tEntry(find_frame, width=30)
 
     ## button 
-    find_button = tButton(find_frame, text='Find', command=find)
-    replace_button = tButton(find_frame, text= 'Replace', command=replace)
+    find_button = tButton(find_frame, text="Find", command=find)
+    replace_button = tButton(find_frame, text= "Replace", command=replace)
 
     ## label grid 
     text_find_label.grid(row=0, column=0, padx=4, pady=4)
