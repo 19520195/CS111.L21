@@ -69,12 +69,12 @@ theme_choice = StringVar()
 color_Icons = (light_default_icon, light_plus_icon, dark_icon, red_icon, monokai_icon, night_icon)
 
 color_dict = {
-    "Light Default":("#000000", "#ffffff"), 
-    "Light Plus":("#474747", "e0e0e0"), 
-    "Dark":("#c4c4c4", "#2d2d2d"), 
-    "Red":("#2d2d2d", "#ffe8e8"), 
-    "Monokai":("#d3b774", "#474747"), 
-    "Night Blue":("#ededed", "#6b9dc2")
+    "Light Default": ("#000000", "#ffffff"), 
+    "Light Plus": ("#474747", "e0e0e0"), 
+    "Dark": ("#c4c4c4", "#2d2d2d"), 
+    "Red": ("#2d2d2d", "#ffe8e8"), 
+    "Monokai": ("#d3b774", "#474747"), 
+    "Night Blue": ("#ededed", "#6b9dc2")
 }
 
 #cascade
