@@ -10,14 +10,14 @@ def config_color(keys, Clr):
         if word:
             start_pos = "1.0"
             while True:
-                start_pos = textWriteCode.search(word, start_pos, stopindex = END)
+                start_pos = text_write_code.search(word, start_pos, stopindex = END)
                 if not start_pos:
                     break 
                 end_pos = f"{start_pos}+{len(word)}c"
-                textWriteCode.tag_add(Clr, start_pos, end_pos)
+                text_write_code.tag_add(Clr, start_pos, end_pos)
                 matches +=  1
                 start_pos = end_pos
-                textWriteCode.tag_config(Clr, foreground = Clr)
+                text_write_code.tag_config(Clr, foreground = Clr)
 
 
 def auto_color(event = None):
@@ -52,6 +52,8 @@ paste_icon = PhotoImage(file = "./Icons/paste.png")
 cut_icon = PhotoImage(file = "./Icons/cut.png")
 clearall_icon = PhotoImage(file = "./Icons/clear_all.png")
 find_icon = PhotoImage(file = "./Icons/find.png")
+undo_icon = PhotoImage(file = "./Icons/undo.png")
+redo_icon = PhotoImage(file = "./Icons/redo.png")
 
 edit = Menu(main_menu, tearoff = False)
 
@@ -118,12 +120,12 @@ xscrollbar.pack(side = BOTTOM, fill = X)
 yscrollbar = Scrollbar(row1)
 yscrollbar.pack(side = RIGHT, fill = Y)
 
-textWriteCode = Text(row1, wrap = NONE, relief = FLAT, font = ("Consolas", 16) , xscrollcommand = xscrollbar.set, yscrollcommand = yscrollbar.set)
+text_write_code = Text(row1, wrap = NONE, relief = FLAT, font = ("Consolas", 16) , xscrollcommand = xscrollbar.set, yscrollcommand = yscrollbar.set, undo = True)
 
-textWriteCode.pack( fill = BOTH, padx = 5, pady = 5, expand = True) 
+text_write_code.pack( fill = BOTH, padx = 5, pady = 5, expand = True) 
 
-xscrollbar.config(command = textWriteCode.xview)
-yscrollbar.config(command = textWriteCode.yview)
+xscrollbar.config(command = text_write_code.xview)
+yscrollbar.config(command = text_write_code.yview)
 
 ######## font family and font size functionality
 current_font_family = "Consolas"
@@ -132,12 +134,12 @@ current_font_size = 16
 def change_font(main_application):
     global current_font_family
     current_font_family =  font_family.get()
-    textWriteCode.configure(font = (current_font_family, current_font_size))
+    text_write_code.configure(font = (current_font_family, current_font_size))
 
 def change_fontsize(main_application):
     global current_font_size
     current_font_size =  size_var.get()
-    textWriteCode.configure(font = (current_font_family, current_font_size))
+    text_write_code.configure(font = (current_font_family, current_font_size))
 
 font_box.bind("<<ComboboxSelected>>", change_font)
 font_size.bind("<<ComboboxSelected>>", change_fontsize)
@@ -153,7 +155,7 @@ url = ""           #GLOBAL VARIABLE
 def new_file(event = None):
     global url
     url = ""
-    textWriteCode.delete(1.0, END)
+    text_write_code.delete(1.0, END)
     main_application.title("New file")
 
 file.add_command(label = "NEW", image = new_icon, compound = LEFT, accelerator = "CTRL+N", command = new_file)
@@ -164,8 +166,8 @@ def open_file(event = None):
     url = filedialog.askopenfilename(title = "Select File", filetypes = [("Bare Bones", "*.bb"), ("All Files", "*.*")])
     try:
         with open(url, "r") as fr:
-            textWriteCode.delete(1.0, END)
-            textWriteCode.insert(1.0, fr.read())
+            text_write_code.delete(1.0, END)
+            text_write_code.insert(1.0, fr.read())
             auto_color()
     except FileNotFoundError:
         return
@@ -180,7 +182,7 @@ def save_file(event = None):
     global url
     try:
         if url:
-            content =  str(textWriteCode.get(1.0, END))
+            content =  str(text_write_code.get(1.0, END))
             with open(url, "w", encoding = "utf-8") as fw:
                 fw.write(content)
             main_application.title(os.path.basename(url))
@@ -188,7 +190,7 @@ def save_file(event = None):
         else:
             url = filedialog.asksaveasfilename(title = "Select File", defaultextension = ".bb", filetypes = [("Bare Bones", "*.bb"), ("All Files", "*.*")])
             fo = open(url, "w")
-            code = textWriteCode.get("1.0", END)
+            code = text_write_code.get("1.0", END)
             fo.write(code)
             fo.close()
             main_application.title(os.path.basename(url))
@@ -205,7 +207,7 @@ def save_as(event = None):
     try:
         url = filedialog.asksaveasfilename(title = "Select File", defaultextension = ".bb", filetypes = [("Bare Bones", "*.bb"), ("All Files", "*.*")])
         fo = open(url, "w")
-        code = textWriteCode.get("1.0", END)
+        code = text_write_code.get("1.0", END)
         fo.write(code)
         fo.close()
         main_application.title(os.path.basename(url))
@@ -214,33 +216,40 @@ def save_as(event = None):
 
 file.add_command(label = "SAVE AS", image = save_icon, compound = LEFT, accelerator = "CTRL+ALT+S", command = save_as)
 
-############ find functionality
+def redo(event) :
+    text_write_code.edit_redo
+    auto_color()
 
+def undo(event) :
+    text_write_code.edit_redo
+    auto_color()
+
+############ find functionality
 def find_func(event = None):
 
     def find():
         word = find_input.get()
-        textWriteCode.tag_remove("match", "1.0", END)
+        text_write_code.tag_remove("match", "1.0", END)
         matches = 0
         if word:
             start_pos = "1.0"
             while True:
-                start_pos = textWriteCode.search(word, start_pos, stopindex = END)
+                start_pos = text_write_code.search(word, start_pos, stopindex = END)
                 if not start_pos:
                     break 
                 end_pos = f"{start_pos}+{len(word)}c"
-                textWriteCode.tag_add("match", start_pos, end_pos)
+                text_write_code.tag_add("match", start_pos, end_pos)
                 matches +=  1
                 start_pos = end_pos
-                textWriteCode.tag_config("match", foreground = "red", background = "yellow")
+                text_write_code.tag_config("match", foreground = "red", background = "yellow")
     
     def replace():
         word = find_input.get()
         replace_text = replace_input.get()
-        content = textWriteCode.get(1.0, END)
+        content = text_write_code.get(1.0, END)
         new_content = content.replace(word, replace_text)
-        textWriteCode.delete(1.0, END)
-        textWriteCode.insert(1.0, new_content)
+        text_write_code.delete(1.0, END)
+        text_write_code.insert(1.0, new_content)
 
     find_dialogue = Toplevel()
     find_dialogue.geometry("450x250+500+200")
@@ -277,10 +286,12 @@ def find_func(event = None):
 
     find_dialogue.mainloop()
 
-edit.add_command(label = "COPY", image = copy_icon, compound = LEFT, accelerator = "CTRL+C", command = lambda:textWriteCode.event_generate("<Control c>"))
-edit.add_command(label = "PASTE", image = paste_icon, compound = LEFT, accelerator = "CTRL+V", command = lambda:textWriteCode.event_generate("<Control v>"))
-edit.add_command(label = "CUT", image = cut_icon, compound = LEFT, accelerator = "CTRL+X", command = lambda:textWriteCode.event_generate("<Control x>"))
-edit.add_command(label = "CLEAR ALL", image = clearall_icon, compound = LEFT, accelerator = "CTRL+ALT+X", command = lambda:textWriteCode.delete(1.0, END))
+edit.add_command(label = "COPY", image = copy_icon, compound = LEFT, accelerator = "CTRL+C", command = lambda:text_write_code.event_generate("<Control c>"))
+edit.add_command(label = "PASTE", image = paste_icon, compound = LEFT, accelerator = "CTRL+V", command = lambda:text_write_code.event_generate("<Control v>"))
+edit.add_command(label = "CUT", image = cut_icon, compound = LEFT, accelerator = "CTRL+X", command = lambda:text_write_code.event_generate("<Control x>"))
+edit.add_command(label = "CLEAR ALL", image = clearall_icon, compound = LEFT, accelerator = "CTRL+ALT+X", command = lambda:text_write_code.delete(1.0, END))
+edit.add_command(label = "UNDO", image = undo_icon, compound = LEFT, accelerator = "CTRL+Z", command = undo)
+edit.add_command(label = "REDO", image = redo_icon, compound = LEFT, accelerator = "CTRL+Y", command = redo)
 edit.add_command(label = "FIND", image = find_icon, compound = LEFT, accelerator = "CTRL+F", command = find_func)
 
 ## color theme 
@@ -288,7 +299,7 @@ def change_theme():
     chosen_theme = theme_choice.get()
     color_tuple = color_dict.get(chosen_theme)
     fg_color, bg_color = color_tuple[0], color_tuple[1]
-    textWriteCode.config(background = bg_color, fg = fg_color) 
+    text_write_code.config(background = bg_color, fg = fg_color) 
 count = 0 
 for i in color_dict:
     color_theme.add_radiobutton(label = i, image = color_Icons[count], variable = theme_choice, compound = LEFT, command = change_theme)
@@ -301,9 +312,11 @@ main_application.bind("<Control-s>", save_file)
 main_application.bind("<Control-Alt-s>", save_as)
 main_application.bind("<Control-f>", find_func)
 main_application.bind("<Key>", auto_color)
+main_application.bind("<Control-z>", undo)
+main_application.bind("<Control-y>", redo)
 
 def handle_button_run_code() :
-    # code = textWriteCode.get("1.0", END)
+    # code = text_write_code.get("1.0", END)
     return
         
 row2 =  Frame(main_application)
