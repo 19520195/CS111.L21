@@ -1,7 +1,6 @@
 import os
 from tkinter.ttk import *
 from tkinter import *
-from time import sleep
 from tkinter import font, colorchooser, filedialog, messagebox
 
 main_path = os.path.dirname(os.path.realpath(__file__))
@@ -24,14 +23,13 @@ def config_color(keys, Clr):
 
 
 def auto_color(event = None):
-    blue = ("clear", "while", "not", "do", "end")
-    green = ("export", "incr", "decr", "assign")
-    pink = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
-    red = (";", " = ")
-    config_color(blue, "blue")
-    config_color(green, "green")
-    config_color(pink, "#FF1493")
-    config_color(red, "red")
+    control_word = ("clear", "while", "not", "do", "end")
+    builtin_word = ("export", "incr", "decr", "assign")
+    digit_word   = [str(_) for _ in range(10)]
+
+    config_color(control_word, "#40aedf")
+    config_color(builtin_word, "#eaaa37")
+    config_color(digit_word  , "#88cc88")
 
 main_application = Tk()
 main_application.geometry("1200x800")
