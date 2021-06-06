@@ -39,32 +39,32 @@ def auto_color(event = None):
 main_menu = Menu()
 
 #------------------file tab-------------------------#
-new_icon = PhotoImage(file = "./Icons/new.png")
-open_icon = PhotoImage(file = "./Icons/open.png")
-save_icon = PhotoImage(file = "./Icons/save.png")
-save_as_icon = PhotoImage(file = "./Icons/save_as.png")
-exit_icon = PhotoImage(file = "./Icons/exit.png")
+new_icon = PhotoImage(file=os.path.join(main_path, "Icons", "new.png"))
+open_icon = PhotoImage(file=os.path.join(main_path, "Icons", "open.png"))
+save_icon = PhotoImage(file=os.path.join(main_path, "Icons", "save.png"))
+save_as_icon = PhotoImage(file=os.path.join(main_path, "Icons", "save_as.png"))
+exit_icon = PhotoImage(file=os.path.join(main_path, "Icons", "exit.png"))
 
 file = Menu(main_menu, tearoff = False)
 
 #----------------------------edit tab----------------------------#
-copy_icon = PhotoImage(file = "./Icons/copy.png")
-paste_icon = PhotoImage(file = "./Icons/paste.png")
-cut_icon = PhotoImage(file = "./Icons/cut.png")
-clearall_icon = PhotoImage(file = "./Icons/clear_all.png")
-find_icon = PhotoImage(file = "./Icons/find.png")
-undo_icon = PhotoImage(file = "./Icons/undo.png")
-redo_icon = PhotoImage(file = "./Icons/redo.png")
+copy_icon = PhotoImage(file=os.path.join(main_path, "Icons", "copy.png"))
+paste_icon = PhotoImage(file=os.path.join(main_path, "Icons", "paste.png"))
+cut_icon = PhotoImage(file=os.path.join(main_path, "Icons", "cut.png"))
+clearall_icon = PhotoImage(file=os.path.join(main_path, "Icons", "clear_all.png"))
+find_icon = PhotoImage(file=os.path.join(main_path, "Icons", "find.png"))
+undo_icon = PhotoImage(file=os.path.join(main_path, "Icons", "undo.png"))
+redo_icon = PhotoImage(file=os.path.join(main_path, "Icons", "redo.png"))
 
 edit = Menu(main_menu, tearoff = False)
 
 #-------------------------------window---------------------#
-light_default_icon = PhotoImage(file = "./Icons/light_default.png")
-light_plus_icon = PhotoImage(file = "./Icons/light_plus.png")
-dark_icon = PhotoImage(file = "./Icons/dark.png")
-red_icon = PhotoImage(file = "./Icons/red.png")
-monokai_icon = PhotoImage(file = "./Icons/monokai.png")
-night_icon = PhotoImage(file = "./Icons/night_blue.png")
+light_default_icon = PhotoImage(file=os.path.join(main_path, "Icons", "light_default.png"))
+light_plus_icon = PhotoImage(file=os.path.join(main_path, "Icons", "light_plus.png"))
+dark_icon = PhotoImage(file=os.path.join(main_path, "Icons", "dark.png"))
+red_icon = PhotoImage(file=os.path.join(main_path, "Icons", "red.png"))
+monokai_icon = PhotoImage(file=os.path.join(main_path, "Icons", "monokai.png"))
+night_icon = PhotoImage(file=os.path.join(main_path, "Icons", "night_blue.png"))
 
 color_theme = Menu(main_menu, tearoff = False)
 
