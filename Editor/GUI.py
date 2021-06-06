@@ -69,16 +69,6 @@ night_icon = PhotoImage(file = "./Icons/night_blue.png")
 color_theme = Menu(main_menu, tearoff = False)
 
 theme_choice = StringVar()
-color_icons = (light_default_icon, light_plus_icon, dark_icon, red_icon, monokai_icon, night_icon)
-
-color_dict = {
-    "Light Default": ("#000000", "#ffffff"),
-    "Light Plus": ("#474747", "#e0e0e0"),
-    "Dark": ("#c4c4c4", "#2d2d2d"),
-    "Pink": ("#2d2d2d", "#ffe8e8"),
-    "Monokai": ("#474747", "#d3b774"),
-    "Night Blue": ("#ededed", "#6b9dc2")
-}
 
 #cascade
 main_menu.add_cascade(label = "File", menu = file)
@@ -297,6 +287,17 @@ def change_theme():
     color_tuple = color_dict.get(chosen_theme)
     fg_color, bg_color = color_tuple[0], color_tuple[1]
     text_write_code.config(background = bg_color, fg = fg_color)
+
+color_icons = (light_default_icon, light_plus_icon, dark_icon, red_icon, monokai_icon, night_icon)
+
+color_dict = {
+    "Light Default": ("#000000", "#ffffff"),
+    "Light Plus": ("#474747", "#e0e0e0"),
+    "Dark": ("#c4c4c4", "#2d2d2d"),
+    "Pink": ("#2d2d2d", "#ffe8e8"),
+    "Monokai": ("#474747", "#d3b774"),
+    "Night Blue": ("#ededed", "#6b9dc2")
+}
 
 count = 0
 for i in color_dict:
