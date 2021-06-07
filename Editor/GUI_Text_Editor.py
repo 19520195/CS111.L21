@@ -4,7 +4,6 @@ class Text_Editor:
     def __init__(self, main_application):
         self.text_frame = Frame(main_application)
         self.text_frame.pack(side = BOTTOM , fill = BOTH, expand = True)
-        # self.text_frame.pack(side = BOTTOM , fill = NONE, expand = True)
         # Horizontal (x) Scroll bar
         self.xscrollbar = Scrollbar(self.text_frame, orient = HORIZONTAL)
         self.xscrollbar.pack(side = BOTTOM, fill = X)

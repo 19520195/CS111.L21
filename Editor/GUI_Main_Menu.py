@@ -1,6 +1,7 @@
+import os
 from tkinter import *
 from tkinter import filedialog
-import os
+from GUI_Text_Editor import Text_Editor
 
 class Main_Menu:
     def __init__(self,main_application,text_editor,icons) :
@@ -14,6 +15,12 @@ class Main_Menu:
         color_theme = Menu(self.main_menu, tearoff = False)
 
         def run_code(event = None) :
+            output = Tk()
+            output.geometry("500x500")
+            output.title("Result")
+            text_ouput = Text_Editor(output)
+            text_ouput.text_editor.insert("1.0","Hello")
+            output.mainloop()
             return
 
         def config_color(keys, clr):
