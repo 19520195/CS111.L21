@@ -1,4 +1,5 @@
 import os
+import string
 from tkinter import *
 from tkinter import filedialog
 from GUI_Text_Editor import Text_Editor
@@ -23,28 +24,50 @@ class Main_Menu:
             output.mainloop()
             return
 
-        def config_color(keys, clr):
+        def config_color(words, clr):
             text_editor.tag_delete(clr)
-            for word in keys :
+
+            for word in words :
                 start_pos = "1.0"
                 while True:
                     start_pos = text_editor.search(word, start_pos, stopindex = END)
                     if not start_pos:
                         break
                     end_pos = f"{start_pos}+{len(word)}c"
-                    text_editor.tag_add(clr, start_pos, end_pos)
+                    row, column = start_pos.split(".")
+                   
+                    if "#" not in text_editor.get(f"{row}.0", start_pos) :
+                        prev = text_editor.get(f"{start_pos}-1c", start_pos).upper()
+                        next = text_editor.get(end_pos, f"{end_pos}+1c").upper()
+                        if prev not in string.ascii_uppercase and next not in string.ascii_uppercase or start_pos == "1.0" :
+                            text_editor.tag_add(clr, start_pos, end_pos)
                     start_pos = end_pos
-                    text_editor.tag_config(clr, foreground = clr)
+           
+            text_editor.tag_config(clr, foreground = clr)
 
 
         def auto_color(event = None):
-            control_word = ("clear ", "while ", "not ", " do", "end;", "end ")
-            builtin_word = ("export ", "incr ", "decr ", "assign ")
+            control_word = ("clear", "while", "not", "do", "end")
+            builtin_word = ("export", "incr", "decr", "assign")
             digit_word   = [str(_) for _ in range(10)]
 
             config_color(control_word, "#40aedf")
             config_color(builtin_word, "#eaaa37")
             config_color(digit_word  , "#88cc88")
+            
+            text_editor.tag_delete("comment")
+            
+            start_pos = "1.0"
+            while True:
+                start_pos = text_editor.search("#", start_pos, stopindex = END)
+                if not start_pos:
+                    break
+                row, column = start_pos.split(".")
+                end_pos = f"{row}.end"
+                text_editor.tag_add("comment", start_pos, end_pos)
+                start_pos = end_pos
+
+            text_editor.tag_config("comment", foreground = "#808080")
         
         #NEW FILE FUNCTIONALITY
         def new_file(event = None):
@@ -77,17 +100,49 @@ class Main_Menu:
                     main_application.title(os.path.basename(self.url))
 
                 else:
-                    url = filedialog.asksaveasfilename(title = "Select File", defaultextension = ".bb", filetypes = [("Bare Bones", "*.bb"), ("All Files", "*.*")])
-                    fo = open(url, "w")
+                    self.url = filedialog.asksaveasfilename(title = "Select File", defaultextension = ".bb", filetypes = [("Bare Bones", "*.bb"), ("All Files", "*.*")])
+                    fo = open(self.url, "w")
                     code = text_editor.get("1.0", END)
                     fo.write(code)
                     fo.close()
-                    main_application.title(os.path.basename(url))
+                    main_application.title(os.path.basename(self.url))
             except:
-                main_application.title(os.path.basename(url))
+                main_application.title(os.path.basename(self.url))
                 return
-            main_application.title(os.path.basename(url))
+            main_application.title(os.path.basename(self.url))
+        
 
+        def comment (event = None):
+            try:
+                row_start, column_start = map(int, text_editor.index("sel.first").split("."))
+                row_end, column_end = map(int, text_editor.index("sel.last").split("."))
+                for i in range(row_end - row_start + 1):
+                    id = f"{row_start + i}.{0}"
+                    text_editor.insert(id,"# ")
+            except:
+                row, column = map(int, text_editor.index("insert").split("."))
+                id = f"{row}.{0}"
+                text_editor.insert(id,"# ")
+
+            auto_color()
+
+        def uncomment (event = None):
+            try:
+                row_start, column_start = map(int, text_editor.index("sel.first").split("."))
+                row_end, column_end = map(int, text_editor.index("sel.last").split("."))
+                for i in range(row_end - row_start + 1):
+                    start = f"{row_start + i}.{0}"
+                    end = f"{row_start + i}.{2}"
+                    if text_editor.get(start,end) == "# " :
+                        text_editor.delete(start, end)
+            except:
+                row, column = map(int, text_editor.index("insert").split("."))
+                start = f"{row}.{0}"
+                end = f"{row}.{2}"
+                if text_editor.get(start,end) == "# " :
+                    text_editor.delete(start, end)
+                
+            auto_color()
 
         #save as
         def save_as(event = None):
@@ -175,21 +230,6 @@ class Main_Menu:
 
             find_dialogue.mainloop()
 
-        file.add_command(label = "New", image = icons.new, compound = LEFT, accelerator = "Ctrl+N", command = new_file)
-        file.add_command(label = "Open", image = icons.open, compound = LEFT, accelerator = "Ctrl+O", command = open_file)
-        file.add_command(label = "Save", image = icons.save, compound = LEFT, accelerator = "Ctrl+S", command = save_file)
-        file.add_command(label = "Save As", image = icons.save_as, compound = LEFT, accelerator = "Ctrl+Alt+S", command = save_as)
-
-        edit.add_command(label = "Copy", image = icons.copy, compound = LEFT, accelerator = "Ctrl+C", command = lambda:text_editor.event_generate("<Control c>"))
-        edit.add_command(label = "Paste", image = icons.paste, compound = LEFT, accelerator = "Ctrl+V", command = lambda:text_editor.event_generate("<Control v>"))
-        edit.add_command(label = "Cut", image = icons.cut, compound = LEFT, accelerator = "Ctrl+X", command = lambda:text_editor.event_generate("<Control x>"))
-        edit.add_command(label = "Clear all", image = icons.clear_all, compound = LEFT, accelerator = "Ctrl+Alt+X", command = lambda:text_editor.delete(1.0, END))
-        edit.add_command(label = "Undo", image = icons.undo, compound = LEFT, accelerator = "Ctrl+Z", command = undo)
-        edit.add_command(label = "Redo", image = icons.redo, compound = LEFT, accelerator = "Ctrl+Y", command = redo)
-        edit.add_command(label = "Find", image = icons.find, compound = LEFT, accelerator = "Ctrl+F", command = find_func)
-
-        run.add_command(label = "Run", image = icons.run, compound = LEFT, accelerator = "F9", command = run_code)
-        
         ## color theme
         def change_theme():
             chosen_theme = theme_choice.get()
@@ -202,16 +242,33 @@ class Main_Menu:
         color_dict = {
             "Light Default": ("#000000", "#ffffff"),
             "Light Plus": ("#474747", "#e0e0e0"),
-            "Dark": ("#c4c4c4", "#2d2d2d"),
+            "Dark": ("#FFFFFF", "#2d2d2d"),
             "Pink": ("#2d2d2d", "#ffe8e8"),
             "Monokai": ("#474747", "#d3b774"),
             "Night Blue": ("#ededed", "#6b9dc2")
         }
-
         count = 0
         for i in color_dict:
             color_theme.add_radiobutton(label = i, image = color_icons[count], variable = theme_choice, compound = LEFT, command = change_theme)
             count += 1
+
+        file.add_command(label = "New", image = icons.new, compound = LEFT, accelerator = "Ctrl+N", command = new_file)
+        file.add_command(label = "Open", image = icons.open, compound = LEFT, accelerator = "Ctrl+O", command = open_file)
+        file.add_command(label = "Save", image = icons.save, compound = LEFT, accelerator = "Ctrl+S", command = save_file)
+        file.add_command(label = "Save As", image = icons.save_as, compound = LEFT, accelerator = "Ctrl+Alt+S", command = save_as)
+
+        edit.add_command(label = "Copy", image = icons.copy, compound = LEFT, accelerator = "Ctrl+C", command = lambda:text_editor.event_generate("<Control c>"))
+        edit.add_command(label = "Paste", image = icons.paste, compound = LEFT, accelerator = "Ctrl+V", command = lambda:text_editor.event_generate("<Control v>"))
+        edit.add_command(label = "Cut", image = icons.cut, compound = LEFT, accelerator = "Ctrl+X", command = lambda:text_editor.event_generate("<Control x>"))
+        edit.add_command(label = "Clear all", image = icons.clear_all, compound = LEFT, accelerator = "Ctrl+Alt+X", command = lambda:text_editor.delete(1.0, END))
+        edit.add_command(label = "Undo", image = icons.undo, compound = LEFT, accelerator = "Ctrl+Z", command = undo)
+        edit.add_command(label = "Redo", image = icons.redo, compound = LEFT, accelerator = "Ctrl+Y", command = redo)
+        edit.add_command(label = "Find", image = icons.find, compound = LEFT, accelerator = "Ctrl+F", command = find_func)
+        edit.add_command(label = "Comment", compound = LEFT, accelerator = "Control-Shift-C", command = comment)
+        edit.add_command(label = "UnComment", compound = LEFT, accelerator = "Control-Shift-X", command = uncomment)
+
+        run.add_command(label = "Run", image = icons.run, compound = LEFT, accelerator = "F9", command = run_code )
+        
         
         self.main_menu.add_cascade(label = "File", menu = file)
         self.main_menu.add_cascade(label = "Edit", menu = edit)
@@ -230,4 +287,7 @@ class Main_Menu:
         main_application.bind("<Control-y>", redo)
         main_application.bind("<Control-f>", find_func)
         main_application.bind("<Control-Alt-x>", clear_all)
+        main_application.bind("<Control-Shift-C>", comment)
+        main_application.bind("<Control-Shift-X>", uncomment)
+        
         main_application.bind("<F9>", run_code)
