@@ -11,6 +11,17 @@ Interpreter::Interpreter(const std::string& Filename, const DataTable& Table) : 
 {
 }
 
+
+void Interpreter::SetInput(const std::string& Filename)
+{
+  m_Input = Filename;
+}
+
+void Interpreter::SetDataTable(const DataTable& Table)
+{
+  m_Table = Table;
+}
+
 void Interpreter::Run()
 {
   std::unique_ptr<ExprAST> Expression;
@@ -53,4 +64,11 @@ void Interpreter::Live()
       m_Parser.Ignore();
     }
   }
+}
+
+void Interpreter::Start()
+{
+  if (m_Input.length())
+    return Run();
+  return Live();
 }

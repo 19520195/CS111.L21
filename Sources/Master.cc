@@ -2,51 +2,30 @@
 #include "Interpreter/Interpreter.hh"
 #include "Utilities/FlagController.hh"
 
-int RunCompiler();
+int RunCompiler(const FlagController& Controller);
+int RunInterpreter(const FlagController& Controller);
 
 int main(const int ArgumentCounter, const char** ArgumentValue)
 {
-  // Flag parsing
-  try { Flags.ParseFlag(ArgumentCounter, ArgumentValue); }
-  catch(const std::exception& Exception)
+  FlagController Controller;
+  try { Controller.Parse(ArgumentCounter, ArgumentValue); }
+  catch (const std::exception& Exception)
   {
-    std::cout << Exception.what() << std::endl;
+    std::cerr << Exception.what() << std::endl;
     return EXIT_FAILURE;
   }
 
-  // Helping flag
-  if (Flags.ExistFlag("help"))
-    return std::cout << Flags.Help() << std::endl, EXIT_SUCCESS;
-
-  // Compiler detection
-  if (Flags.ExistFlag("input") && Flags.ExistFlag("output"))
-    return RunCompiler();
-
-  DataTable Table;
-
-  // Create interpreter
-  try
-  {
-    if (!Flags.GetFlag("file").length())
-      Interpreter().Live();
-    else
-      Interpreter(Flags.GetFlag("file"), Table).Run();
-  }
-  catch(const std::exception& Exception)
-  {
-    std::cout << Exception.what() << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  return EXIT_SUCCESS;
+  if (Controller.ExistInput() && Controller.ExistOutput())
+    return RunCompiler(Controller);
+  return RunInterpreter(Controller);
 }
 
-int RunCompiler()
+int RunCompiler(const FlagController& Controller)
 {
   try
   {
-    const std::string& InputFilename = Flags.GetFlag("input");
-    const std::string& OutputFilename = Flags.GetFlag("output");
+    const std::string& InputFilename = Controller.GetInput();
+    const std::string& OutputFilename = Controller.GetOutput();
 
     std::unique_ptr<Parser> RealParser(std::make_unique<Parser>(InputFilename));
     Compiler RealCompiler(std::move(RealParser));
@@ -55,6 +34,24 @@ int RunCompiler()
   catch (const std::exception& Exception)
   {
     std::cerr << "error: " << Exception.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+int RunInterpreter(const FlagController& Controller)
+{
+  Interpreter Interp;
+  if (!Controller.ExistInput())
+    Interp.SetInput(Controller.GetInput());
+  Interp.SetDataTable(Controller.GetDataTable());
+
+  // Create interpreter
+  try { Interp.Start(); }
+  catch(const std::exception& Exception)
+  {
+    std::cout << Exception.what() << std::endl;
     return EXIT_FAILURE;
   }
 
