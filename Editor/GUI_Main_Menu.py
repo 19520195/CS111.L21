@@ -5,7 +5,7 @@ from tkinter import filedialog
 from GUI_Text_Editor import Text_Editor
 
 class Main_Menu:
-    def __init__(self,main_application,text_editor,icons) :
+    def __init__(self,main_application,text_editor, output, icons) :
         self.url = ""
         self.main_menu = Menu()
         theme_choice = StringVar()
@@ -16,12 +16,7 @@ class Main_Menu:
         color_theme = Menu(self.main_menu, tearoff = False)
 
         def run_code(event = None) :
-            output = Tk()
-            output.geometry("500x500")
-            output.title("Result")
-            text_ouput = Text_Editor(output)
-            text_ouput.text_editor.insert("1.0","Hello")
-            output.mainloop()
+            output.text_editor.insert("2.0","Hello")
             return
 
         def config_color(words, clr):
@@ -131,16 +126,26 @@ class Main_Menu:
                 row_start, column_start = map(int, text_editor.index("sel.first").split("."))
                 row_end, column_end = map(int, text_editor.index("sel.last").split("."))
                 for i in range(row_end - row_start + 1):
-                    start = f"{row_start + i}.{0}"
-                    end = f"{row_start + i}.{2}"
-                    if text_editor.get(start,end) == "# " :
-                        text_editor.delete(start, end)
+                    if text_editor.get(f"{row_start + i}.{0}", f"{row_start + i}.{2}") == "# " :
+                        text_editor.delete(f"{row_start + i}.{0}", f"{row_start + i}.{2}")
+                        continue
+
+                    pos = text_editor.search("#", f"{row_start + i}.{0}", stopindex = f"{row_start + i}.end")
+                    if pos :
+                        text_editor.delete(pos, f"{pos}+1c")
+
             except:
                 row, column = map(int, text_editor.index("insert").split("."))
                 start = f"{row}.{0}"
                 end = f"{row}.{2}"
+
                 if text_editor.get(start,end) == "# " :
                     text_editor.delete(start, end)
+                    return
+
+                pos = text_editor.search("#", f"{row}.{0}", stopindex = f"{row}.end")
+                if pos :
+                    text_editor.delete(pos, f"{pos}+1c")
                 
             auto_color()
 
@@ -268,7 +273,6 @@ class Main_Menu:
         edit.add_command(label = "UnComment", compound = LEFT, accelerator = "Control-Shift-X", command = uncomment)
 
         run.add_command(label = "Run", image = icons.run, compound = LEFT, accelerator = "F9", command = run_code )
-        
         
         self.main_menu.add_cascade(label = "File", menu = file)
         self.main_menu.add_cascade(label = "Edit", menu = edit)
