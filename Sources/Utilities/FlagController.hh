@@ -3,30 +3,30 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <regex>
+#include <sstream>
 
 class FlagController
 {
   public:
     FlagController() = default;
-    FlagController(const std::map<std::string, std::string>& FlagDescriptions);
+    // ~FlagController() = default;
 
-    std::string Help() const;
-    bool ExistFlag(const std::string& Flag) const;
+    bool ExistInput() const;
+    bool ExistOutput() const;
 
-    std::string GetFlag(const std::string& Flag) const;
-    std::string SetFlag(const std::string& Flag, const std::string& Value);
+    std::string GetInput() const;
+    std::string GetOutput() const;
+    std::map<std::string, unsigned int> GetDataTable() const;
 
-    std::string AddDescription(const std::string& Flag, const std::string Description);
-    void ParseFlag(const int ArgumentCounter, const char** ArgumentValue);
+    void Parse(const int ArgumentCounter, const char** ArgumentValues);
 
   private:
-    std::map<std::string, std::string> m_Value;
-    std::map<std::string, std::string> m_Description;
-};
+    static const std::regex REGEX_VARIABLE;
+    static const std::regex REGEX_FILENAME_INPUT;
+    static const std::regex REGEX_FILENAME_OUTPUT;
 
-static FlagController Flags({
-  {"file"  , "Input file path\n\tEg: '... --file ../11_Example.bb'" },
-  {"input" , "Input file path\n\tEg: '... --input ../11_Example.bb'" },
-  {"output", "Output file path\n\tEg: '... --output ../11_Example.bb'"},
-  {"set"   , "Set value for a varibale.\n\tEg: '... --set T=11', '... --set \"N=7; T=11\"'"},
-});
+    std::string                         m_InputFilename;
+    std::string                         m_OutputFilename;
+    std::map<std::string, unsigned int> m_VariableTable;
+};

@@ -1,55 +1,61 @@
 #include "FlagController.hh"
 
-FlagController::FlagController(const std::map<std::string, std::string>& FlagDescriptions) : m_Description(FlagDescriptions)
+const std::regex FlagController::REGEX_VARIABLE = std::regex("^([A-Za-z][\\w]*)=([\\d]*)$");
+const std::regex FlagController::REGEX_FILENAME_INPUT = std::regex("-i([\\w]*.bb)");
+const std::regex FlagController::REGEX_FILENAME_OUTPUT = std::regex("-o([\\w]*.bb)");
+
+bool FlagController::ExistInput() const
 {
+  return GetInput().length();
 }
 
-#include <sstream>
-#include <iomanip>
-
-std::string FlagController::Help() const
+bool FlagController::ExistOutput() const
 {
-  std::stringstream Stream;
-  Stream << std::left;
+  return GetOutput().length();
+}
 
-  for (const auto& Description: m_Description)
+std::string FlagController::GetInput() const
+{
+  return m_InputFilename;
+}
+
+std::string FlagController::GetOutput() const
+{
+  return m_OutputFilename;
+}
+
+std::map<std::string, unsigned int> FlagController::GetDataTable() const
+{
+  return m_VariableTable;
+}
+
+void FlagController::Parse(const int ArgumentCounter, const char** ArgumentValues)
+{
+  std::vector<std::string> ArgumentList(ArgumentValues + 1, ArgumentValues + ArgumentCounter);
+  for (const auto& Arg: ArgumentList)
   {
-    Stream << "--" << std::setw(8)  << Description.first;
-    Stream << ": " << Description.second << "\n";
-  }
-
-  return Stream.str();
-}
-
-bool FlagController::ExistFlag(const std::string& Flag) const
-{
-  const auto& Found = m_Value.find(Flag);
-  return Found != m_Value.end();
-}
-
-std::string FlagController::GetFlag(const std::string& Flag) const
-{
-  const auto& Found = m_Value.find(Flag);
-  if (Found != m_Value.end())
-    return Found->second;
-  return "";
-}
-
-std::string FlagController::SetFlag(const std::string& Flag, const std::string& Value)
-{
-  return m_Value[Flag] = Value;
-}
-
-void FlagController::ParseFlag(const int ArgumentCounter, const char** ArgumentValue)
-{
-  for (size_t i = 1; i < ArgumentCounter; i += 2)
-  {
-    std::string Argument(ArgumentValue[i]);
-    if (Argument.length() < 2 || Argument.substr(0, 2) != "--")
-      throw std::logic_error("invalid flag");
-
-    std::string& ValueRef = m_Value[Argument.substr(2)];
-    if (i + 1 < ArgumentCounter)
-      ValueRef += (ValueRef.length() ? "; " : "") + std::string(ArgumentValue[i + 1]);
+    std::smatch Results;
+    if (std::regex_search(Arg, Results, REGEX_VARIABLE))
+    {
+      auto VarName = Results.str(1);
+      auto VarValue = std::stoul(Results.str(2));
+      m_VariableTable[VarName] = VarValue;
+    }
+    else if (std::regex_search(Arg, Results, REGEX_FILENAME_INPUT))
+    {
+      auto Filename = Results.str(1);
+      m_InputFilename = Filename;
+    }
+    else if (std::regex_search(Arg, Results, REGEX_FILENAME_OUTPUT))
+    {
+      auto Filename = Results.str(1);
+      m_OutputFilename = Filename;
+    }
+    else
+    {
+      std::stringstream ErrorStream;
+      ErrorStream << "Invalid flag " << '"' << Arg << '"';
+      throw std::logic_error(ErrorStream.str());
+    }
   }
 }
