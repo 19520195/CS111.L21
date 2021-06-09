@@ -30,5 +30,5 @@ class Interpreter
 
     Parser      m_Parser;
     DataTable   m_Table;
-    std::string m_Input
+    std::string m_Input;
 };

@@ -55,7 +55,6 @@ void Interpreter::Live()
       if (Expression != nullptr)
       {
         unsigned int ReturnValue = ((NumberExpr*)(Expression->Execute(m_Table)).get())->GetValue();
-        std::cout << "Return: " << ReturnValue << std::endl;
       }
     }
     catch (const std::exception& Ex)
