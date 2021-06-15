@@ -17,7 +17,7 @@ std::string BuiltinExpr::GenerateCode() const
     case Token::ASSIGN: return m_Identifier + "=" + m_Expression->GenerateCode();
 
     case Token::IMPORT: return "std::cout<<\"" + m_Identifier + " = \";std::cin>>" + m_Identifier;
-    case Token::EXPORT: return "std::cout<<\"" + m_Identifier + " = \"<<" + m_Identifier;
+    case Token::EXPORT: return "std::cout<<\"" + m_Identifier + " = \"<<" + m_Identifier + "<<std::endl";
     default:            return "__unknow_statement__";
   }
 }
