@@ -3,3 +3,6 @@
 
 # CMake build files
 Build
+
+# Python runtime
+*/__pycache__
