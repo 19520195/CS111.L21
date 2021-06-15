@@ -35,7 +35,6 @@ class Parser
     std::unique_ptr<ExprAST> ParseNextToken();
 
     void Ignore();
-    void ResetInput(const std::string& Filename);
 
   private:
     std::unique_ptr<Lexer> m_Lexer;

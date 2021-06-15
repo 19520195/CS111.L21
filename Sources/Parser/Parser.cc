@@ -193,11 +193,3 @@ void Parser::Ignore()
   if (m_Lexer->GetLastChar() != '\n')
     while (m_Lexer->GetNextChar() != '\n');
 }
-
-void Parser::ResetInput(const std::string& Filename)
-{
-  m_Input = std::make_unique<std::ifstream>(Filename);
-  if (m_Input->is_open() == false)
-    throw std::logic_error("can not open file " + Filename);
-  m_Lexer = std::make_unique<Lexer>(*m_Input.get());
-}
