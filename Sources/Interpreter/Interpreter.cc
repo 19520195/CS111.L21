@@ -15,6 +15,7 @@ Interpreter::Interpreter(const std::string& Filename, const DataTable& Table) : 
 void Interpreter::SetInput(const std::string& Filename)
 {
   m_Input = Filename;
+  m_Parser.ResetInput(Filename);
 }
 
 void Interpreter::SetDataTable(const DataTable& Table)

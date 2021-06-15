@@ -2,7 +2,7 @@
 
 const std::regex FlagController::REGEX_VARIABLE = std::regex("^([A-Za-z][\\w]*)=([\\d]*)$");
 const std::regex FlagController::REGEX_FILENAME_INPUT = std::regex("-i(.*\\.bb)");
-const std::regex FlagController::REGEX_FILENAME_OUTPUT = std::regex("-o(.*\\.bb)");
+const std::regex FlagController::REGEX_FILENAME_OUTPUT = std::regex("-o(.*)");
 
 bool FlagController::ExistInput() const
 {

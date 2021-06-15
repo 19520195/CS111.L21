@@ -43,7 +43,7 @@ int RunCompiler(const FlagController& Controller)
 int RunInterpreter(const FlagController& Controller)
 {
   Interpreter Interp;
-  if (!Controller.ExistInput())
+  if (Controller.ExistInput())
     Interp.SetInput(Controller.GetInput());
   Interp.SetDataTable(Controller.GetDataTable());
 
