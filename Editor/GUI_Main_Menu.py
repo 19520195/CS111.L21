@@ -16,7 +16,11 @@ class Main_Menu:
         color_theme = Menu(self.main_menu, tearoff = False)
 
         def run_code(event = None) :
-            output.text_editor.insert("2.0","Hello")
+            output.text_output.config(state='normal')
+            output.text_output.delete(1.0, END)
+            output.text_output.insert(1.0,"Output:\n")
+            output.text_output.insert(END,"Hello!")
+            output.text_output.config(state='disable')
             return
 
         def config_color(words, clr):
@@ -32,9 +36,9 @@ class Main_Menu:
                     row, column = start_pos.split(".")
                    
                     if "#" not in text_editor.get(f"{row}.0", start_pos) :
-                        prev = text_editor.get(f"{start_pos}-1c", start_pos).upper()
-                        next = text_editor.get(end_pos, f"{end_pos}+1c").upper()
-                        if prev not in string.ascii_uppercase and next not in string.ascii_uppercase or start_pos == "1.0" :
+                        prev_char = text_editor.get(f"{start_pos}-1c", start_pos).upper()
+                        next_char = text_editor.get(end_pos, f"{end_pos}+1c").upper()
+                        if prev_char not in string.ascii_uppercase and next_char not in string.ascii_uppercase or start_pos == "1.0" :
                             text_editor.tag_add(clr, start_pos, end_pos)
                     start_pos = end_pos
            
