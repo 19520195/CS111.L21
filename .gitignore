@@ -3,3 +3,6 @@
 
 # CMake build files
 Build
+
+# Binaries folder
+Binaries
