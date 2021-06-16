@@ -3,3 +3,9 @@
 
 # CMake build files
 Build
+
+# Binaries folder
+Binaries
+
+# Python runtime
+*/__pycache__

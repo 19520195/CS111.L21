@@ -1,35 +1,26 @@
 import os
-from tkinter.ttk import *
 from tkinter import *
-from tkinter import font, colorchooser, filedialog, messagebox
-from typing import Counter
-from GUI_ICONS import Icons
+from tkinter.ttk import *
+from GUI_Icons import Icons
 from GUI_Output import Output
-from GUI_Tool_Bar import Tool_Bar
-from GUI_Main_Menu import Main_Menu
-from GUI_Text_Editor import Text_Editor
+from GUI_ToolBar import ToolBar
+from GUI_MainMenu import MainMenu
+from GUI_TextEditor import TextEditor
 
-main_path = os.path.dirname(os.path.realpath(__file__))
-print(main_path)
+app = Tk()
+app.geometry("800x600")
+app.title("Barebones editor")
 
+icons = Icons(os.path.dirname(os.path.realpath(__file__)), app)
 
-main_application = Tk()
-main_application.geometry("1360x900")
-main_application.title("Barebones editor")
+text_output = Output(app)
+text_editor = TextEditor(app)
+main_menu = MainMenu(app, text_editor.text_editor, text_output, icons)
 
-icons = Icons(main_path,main_application)
+tool_bar = ToolBar(app, text_editor.text_editor)
+tool_bar.tool_bar.pack(side=TOP, fill=X)
 
-text_output = Output(main_application)
+text_output.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
+text_editor.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
 
-text_editor = Text_Editor(main_application)
-
-main_menu = Main_Menu(main_application, text_editor.text_editor, text_output, icons)
-
-tool_bar = Tool_Bar(main_application, text_editor.text_editor)
-
-
-tool_bar.tool_bar.pack(side = TOP, fill = X)
-text_output.text_frame.pack(side = BOTTOM , fill = BOTH, expand = True)
-text_editor.text_frame.pack(side = BOTTOM , fill = BOTH, expand = True)
-
-main_application.mainloop()
+app.mainloop()
