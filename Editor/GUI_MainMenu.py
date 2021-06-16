@@ -1,5 +1,6 @@
 import os
 import string
+import subprocess
 from tkinter import *
 from tkinter import filedialog
 from GUI_TextEditor import TextEditor
@@ -15,12 +16,23 @@ class MainMenu:
         edit = Menu(self.main_menu, tearoff=False)
         color_theme = Menu(self.main_menu, tearoff=False)
 
-        def run_code(event=None) :
+        def run_code(event=None):
+            src_path = os.path.dirname(os.path.realpath(__file__))
+            src_path = os.path.abspath(os.path.join(src_path, ".."))
+            bin_dir = os.path.join(src_path, "Binaries", "Barebones")
+
+            pipe_read, pipe_write = os.pipe()
+            pipe_write = os.fdopen(pipe_write)
+            subprocess.check_call([bin_dir, "-i" + self.url], stdout=pipe_write)
+            pipe_write.close()
+
+            pipe_read = os.fdopen(pipe_read)
             output.text_output.config(state="normal")
             output.text_output.delete(1.0, END)
-            output.text_output.insert(1.0, "Output:\n")
-            output.text_output.insert(END, "Hello!")
+            output.text_output.insert(1.0, pipe_read.read())
             output.text_output.config(state="disable")
+            pipe_read.close()
+
             return
 
         def config_color(words, clr):
