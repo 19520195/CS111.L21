@@ -2,8 +2,6 @@ import os
 import string
 import subprocess
 from tkinter import *
-from tkinter import filedialog
-from GUI_TextEditor import TextEditor
 
 class MainMenu:
     def __init__(self, app, text_editor, output, icons) :
@@ -17,6 +15,9 @@ class MainMenu:
         color_theme = Menu(self.main_menu, tearoff=False)
 
         def run_code(event=None):
+            if not save_file(event):
+                return False
+
             src_path = os.path.dirname(os.path.realpath(__file__))
             src_path = os.path.abspath(os.path.join(src_path, ".."))
             bin_dir = os.path.join(src_path, "Binaries", "Barebones")
@@ -109,9 +110,10 @@ class MainMenu:
                     with open(self.url, "w", encoding="utf-8") as fw:
                         fw.write(content)
                     app.title(os.path.basename(self.url))
-
                 else:
                     self.url = filedialog.asksaveasfilename(title="Select File", defaultextension=".bb", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
+                    if self.url == "":
+                        return False
                     fo = open(self.url, "w")
                     code = text_editor.get("1.0", END)
                     fo.write(code)
@@ -119,8 +121,8 @@ class MainMenu:
                     app.title(os.path.basename(self.url))
             except:
                 app.title(os.path.basename(self.url))
-                return
             app.title(os.path.basename(self.url))
+            return True
 
 
         def comment (event=None):
