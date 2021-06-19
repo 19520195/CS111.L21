@@ -141,7 +141,7 @@ class MainMenu:
                         fw.write(content)
                     app.title(os.path.basename(self.url))
                 else:
-                    self.url = filedialog.asksaveasfilename(title="Select File", defaultextension=".bb", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
+                    self.url = filedialog.asksaveasfilename(title="Save as", defaultextension=".bb", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
                     if self.url == "":
                         return False
                     fo = open(self.url, "w")
@@ -200,7 +200,7 @@ class MainMenu:
         #save as
         def save_as(event=None):
             try:
-                self.url = filedialog.asksaveasfilename(title="Select File", defaultextension=".bb", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
+                self.url = filedialog.asksaveasfilename(title="Save as", defaultextension=".bb", filetypes=[("Bare Bones", "*.bb"), ("All Files", "*.*")])
                 fo = open(self.url, "w")
                 code = text_editor.get("1.0", END)
                 fo.write(code)

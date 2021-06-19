@@ -15,12 +15,12 @@ icons = Icons(os.path.dirname(os.path.realpath(__file__)), app)
 
 text_output = Output(app)
 text_editor = TextEditor(app)
-main_menu = MainMenu(app, text_editor.text_editor, text_output, icons)
+main_menu = MainMenu(app, text_editor.coding_space, text_output, icons)
 
-tool_bar = ToolBar(app, text_editor.text_editor)
+tool_bar = ToolBar(app, text_editor.coding_space)
 tool_bar.tool_bar.pack(side=TOP, fill=X)
 
-text_output.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
-text_editor.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True, pady=1)
+text_editor.render()
+text_output.render()
 
 app.mainloop()
