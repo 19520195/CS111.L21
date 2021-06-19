@@ -210,11 +210,11 @@ class MainMenu:
                 return
 
         def redo(event=None) :
-            text_editor.edit_redo
+            text_editor.edit_redo()
             auto_color()
 
         def undo(event=None) :
-            text_editor.edit_undo
+            text_editor.edit_undo()
             auto_color()
 
         def clear_all(event=None) :
