@@ -2,6 +2,7 @@ import os
 import string
 import subprocess
 from tkinter import *
+from tkinter import filedialog
 
 class MainMenu:
     def __init__(self, app, text_editor, output, icons) :
@@ -31,6 +32,35 @@ class MainMenu:
             output.text_output.config(state="normal")
             output.text_output.delete(1.0, END)
             output.text_output.insert(1.0, pipe_read.read())
+            output.text_output.config(state="disable")
+            pipe_read.close()
+
+            return
+
+        def compile_code(event=None):
+            if not save_file(event):
+                return False
+
+            src_path = os.path.dirname(os.path.realpath(__file__))
+            src_path = os.path.abspath(os.path.join(src_path, ".."))
+            bin_dir = os.path.join(src_path, "Binaries", "Barebones")
+
+            pipe_read, pipe_write = os.pipe()
+            pipe_write = os.fdopen(pipe_write)
+            # pipe_write.write("Compile: Start!\n")
+            subprocess.check_call([
+                    bin_dir,
+                    "-i" + self.url,
+                    "-o" + self.url[:self.url.find(".")]
+                ],
+                stderr=pipe_write
+            )
+            pipe_write.close()
+
+            pipe_read = os.fdopen(pipe_read)
+            output.text_output.config(state="normal")
+            output.text_output.delete(1.0, END)
+            output.text_output.insert(1.0, pipe_read.read() + "\nCompile: Done!")
             output.text_output.config(state="disable")
             pipe_read.close()
 
@@ -291,6 +321,7 @@ class MainMenu:
         edit.add_command(label="UnComment", compound=LEFT, accelerator="Control-Shift-X", command=uncomment)
 
         run.add_command(label = "Run", image=icons.run, compound=LEFT, accelerator="F9", command=run_code)
+        run.add_command(label = "Compile", image=icons.run, compound=LEFT, accelerator="Ctrl+F9", command=compile_code)
 
         self.main_menu.add_cascade(label="File", menu=file)
         self.main_menu.add_cascade(label="Edit", menu=edit)
@@ -313,3 +344,4 @@ class MainMenu:
         app.bind("<Control-Shift-X>", uncomment)
 
         app.bind("<F9>", run_code)
+        app.bind("<Control-F9>", compile_code)
