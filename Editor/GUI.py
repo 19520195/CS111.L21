@@ -21,6 +21,6 @@ tool_bar = ToolBar(app, text_editor.text_editor)
 tool_bar.tool_bar.pack(side=TOP, fill=X)
 
 text_output.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
-text_editor.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
+text_editor.text_frame.pack(side=BOTTOM, fill=BOTH, expand=True, pady=1)
 
 app.mainloop()
