@@ -11,6 +11,15 @@ import Modules.Utilities as bbu
 class App:
     TITLE = "{} - Barebones IDE"
     filepath = ""
+    font = ("Courier New", 16)
+
+    color = dict({
+        "fg": "#ffffff",
+        "bg": "#123456",
+    # foreground = "#FFFFFF"
+    # # background = "#2d2d2d"
+    # background = "#123456"
+    })
 
     def __init__(self) -> None:
         self.app = Tk()
@@ -18,8 +27,8 @@ class App:
         self.app.title(self.TITLE.format("Untitled"))
 
         # self.icon = Icon(self.app)
-        self.input  = Input(self.app)
-        self.output = Output(self.app)
+        self.input  = Input(self)
+        self.output = Output(self)
         self.menu   = Menu(self, self.input.text)
 
         # tool_bar = ToolBar(app, text_editor.coding_space)
@@ -30,17 +39,20 @@ class App:
         self.app.bind("<Control-s>"    , self.file_save  )
         self.app.bind("<Control-Alt-s>", self.file_saveas)
 
-        self.app.bind("<Key>"            , self.code_color      )
+        self.app.bind("<Key>"            , self.code_colidx     )
         self.app.bind("<Control-f>"      , self.code_find       )
         self.app.bind("<Control-z>"      , self.code_undo       )
         self.app.bind("<Control-y>"      , self.code_redo       )
         self.app.bind("<Control-Shift-c>", self.code_comment    )
         self.app.bind("<Control-Shift-x>", self.code_undocomment)
-
-        # self.app.bind("<Control-Alt-x>", clear_all)
+        self.app.bind("<Control-Alt-x>"  , self.input.clear     )
 
         self.app.bind("<F9>"        , self.code_execute)
         self.app.bind("<Control-F9>", self.code_compile)
+
+    def code_colidx(self, event=None):
+        self.code_color(event)
+        self.code_index(event)
 
     def code_color(self, event=None):
         def config_color(words, clr):
@@ -64,9 +76,9 @@ class App:
 
             self.input.text.tag_config(clr, foreground=clr)
 
-        control_word = ("clear", "while", "not", "do", "end")
-        builtin_word = ("export", "incr", "decr", "assign")
-        digit_word   = [str(_) for _ in range(10)]
+        control_word = ("while", "do", "if", "then", "not", "end")
+        builtin_word = ("incr", "decr", "clear", "assign", "export", "import")
+        digit_word   = list(map(str, range(10)))
 
         config_color(control_word, "#40aedf")
         config_color(builtin_word, "#eaaa37")
@@ -86,6 +98,16 @@ class App:
 
         self.input.text.tag_config("comment", foreground="#808080")
 
+    def code_index(self, event=None):
+        num_lines = self.input.get().count('\n')
+        self.input.index.configure(state=NORMAL)
+        self.input.index.delete(1.0, END)
+        self.input.index.insert(END, ''.join(map(lambda i: "{:3d}".format(i+1), range(num_lines))))
+        self.input.index.configure(state=DISABLED)
+
+        Y, _ = self.input.text.yview()
+        self.input.index.yview_moveto(Y)
+
     def file_new(self, event=None):
         self.input.clear()
         self.app.title(self.TITLE.format("Untitiled"))
@@ -93,7 +115,7 @@ class App:
     def file_open(self, event=None):
         def callback(filepath, content):
             self.input.set(content)
-            self.code_color()
+            self.code_colidx()
 
             self.filepath = filepath
             self.app.title(self.TITLE.format(os.path.basename(filepath)))
@@ -121,11 +143,11 @@ class App:
 
     def code_undo(self, event=None):
         self.input.text.edit_undo()
-        self.code_color(event)
+        self.code_colidx(event)
 
     def code_redo(self, event=None):
         self.input.text.edit_redo()
-        self.code_color(event)
+        self.code_colidx(event)
 
     def code_comment(self, event=None):
         try:
@@ -232,7 +254,6 @@ class App:
 
         src_path = os.path.dirname(os.path.realpath(__file__))
         prog_path = os.path.abspath(os.path.join(src_path, "..", "..", "Binaries", "Barebones"))
-        print([prog_path] + list(arg))
         pipe_read, pipe_write = os.pipe()
         pipe_write = os.fdopen(pipe_write)
         subprocess.call([prog_path] + list(arg), stdout=pipe_write)
@@ -240,7 +261,7 @@ class App:
 
         pipe_read = os.fdopen(pipe_read)
         self.output.text.config(state="normal")
-        self.output.set(pipe_read.read() + "\nBBE: Finished")
+        self.output.set(pipe_read.read() + "> Complete")
         self.output.text.config(state="disable")
         pipe_read.close()
         return True

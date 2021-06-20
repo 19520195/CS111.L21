@@ -1,23 +1,40 @@
+from ast import fix_missing_locations
 from tkinter import *
 from .Textbase import Textbase
 
 class Input(Textbase):
     def __init__(self, app):
-        self.frame = Frame(app)
-
-        self.index = Text(self.frame, wrap=NONE, font=("Consolas", 16), background="#2d2d2d", fg ="#FFFFFF", width=3, height=0)
-        self.index.insert(1.0, "1")
-        self.index.configure(selectbackground=self.index.cget("bg"), state=DISABLED)
+        self.frame = Frame(app.app)
 
         self.scrollbar = Scrollbar(self.frame, background='#F0F1F2')
         self.scrollbar.pack(side=RIGHT, fill=Y)
 
-        self.text = Text(self.frame, wrap=NONE, font=("Consolas", 16), background="#2d2d2d", fg ="#FFFFFF", yscrollcommand=self.scrollbar.set, undo=True, height=0)
+        self.index = Text(self.frame, wrap=CHAR, font=app.font, background=app.color["bg"], foreground=app.color["fg"], width=3, height=0)
+        self.index.config(selectbackground=self.index.cget("bg"), state=DISABLED)
+
+        self.text = Text(self.frame, wrap=NONE, font=app.font, background=app.color["bg"], foreground=app.color["fg"], undo=True, height=0)
         self.text.config(tabs=4, insertbackground="Red", insertwidth=4)
+
+
+        self.lock = True
+        def scroll_si(X, Y):
+            self.scrollbar.set(X, Y)
+            self.index.yview_moveto(X)
+
+        def scroll_st(X, Y):
+            self.scrollbar.set(X, Y)
+            self.text.yview_moveto(X)
+
+        def scroll_ti(X, Y):
+            self.text.yview(X, Y)
+            self.index.yview(X, Y)
+
+        self.text     .config(yscrollcommand=scroll_si)
+        self.index    .config(yscrollcommand=scroll_st)
+        self.scrollbar.config(       command=scroll_ti)
 
         self.index.pack(side=LEFT, fill=Y)
         self.text.pack(side=LEFT, fill=BOTH, expand=True)
-        self.scrollbar.config(command=self.text.yview)
 
     def render(self):
         self.frame.pack(side=TOP, fill=BOTH, expand=True, pady=1)
