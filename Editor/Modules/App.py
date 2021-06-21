@@ -14,11 +14,11 @@ class App:
     font = ("Courier New", 16)
 
     color = dict({
-        "fg": "#ffffff",
-        "bg": "#123456",
-    # foreground = "#FFFFFF"
-    # # background = "#2d2d2d"
-    # background = "#123456"
+        "fg"     : "#dcdcdc",
+        "bg"     : "#1d2432",
+        "digit"  : "#adc5a2",
+        "control": "#ff636f",
+        "builtin": "#63b7fc",
     })
 
     def __init__(self) -> None:
@@ -76,13 +76,13 @@ class App:
 
             self.input.text.tag_config(clr, foreground=clr)
 
+        digit_word   = list(map(str, range(10)))
         control_word = ("while", "do", "if", "then", "not", "end")
         builtin_word = ("incr", "decr", "clear", "assign", "export", "import")
-        digit_word   = list(map(str, range(10)))
 
-        config_color(control_word, "#40aedf")
-        config_color(builtin_word, "#eaaa37")
-        config_color(digit_word  , "#88cc88")
+        config_color(digit_word  , self.color["digit"]  )
+        config_color(control_word, self.color["control"])
+        config_color(builtin_word, self.color["builtin"])
 
         self.input.text.tag_delete("comment")
 
@@ -96,7 +96,7 @@ class App:
             self.input.text.tag_add("comment", start_pos, end_pos)
             start_pos = end_pos
 
-        self.input.text.tag_config("comment", foreground="#808080")
+        self.input.text.tag_config("comment", foreground="#828c9b")
 
     def code_index(self, event=None):
         num_lines = self.input.get().count('\n')

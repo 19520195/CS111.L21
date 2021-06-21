@@ -13,7 +13,7 @@ class Input(Textbase):
         self.index.config(selectbackground=self.index.cget("bg"), state=DISABLED)
 
         self.text = Text(self.frame, wrap=NONE, font=app.font, background=app.color["bg"], foreground=app.color["fg"], undo=True, height=0)
-        self.text.config(tabs=4, insertbackground="Red", insertwidth=4)
+        self.text.config(tabs=4, insertbackground=app.color["fg"], insertwidth=2)
 
 
         self.lock = True
