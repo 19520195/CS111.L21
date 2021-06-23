@@ -119,7 +119,12 @@ class App:
             self.code_colidx()
 
             self.filepath = filepath
-            self.app.title(self.TITLE.format(os.path.basename(filepath)))
+            filename = os.path.basename(self.filepath)
+
+            self.app.title(self.TITLE.format(filename))
+            self.output.text.config(state=NORMAL)
+            self.output.set("LOADED::{}".format(filename))
+            self.output.text.config(state=DISABLED)
         try:
             bbu.AskOpenFile(callback)
             return True
@@ -249,7 +254,7 @@ class App:
 
         find_dialogue.mainloop()
 
-    def code_run(self, *arg, event=None):
+    def code_run(self, mode, *arg, event=None):
         if not self.file_save(event): return False
         try:
             src_path = os.path.dirname(os.path.realpath(__file__))
@@ -261,24 +266,24 @@ class App:
 
             pipe_read = os.fdopen(pipe_read)
             self.output.text.config(state=NORMAL)
-            self.output.set(pipe_read.read() + "> Complete")
+            self.output.set(pipe_read.read() + "{}::COMPLETE".format(mode))
             self.output.text.config(state=DISABLED)
             pipe_read.close()
         except:
             self.output.text.config(state=NORMAL)
-            self.output.set("RUNNING::FAIL_TO_CALL_EXECUTABLE_FILE: checking your Binaries folder and look up Barebones file")
+            self.output.set("{}::FAIL_TO_CALL_EXECUTABLE_FILE: checking your Binaries folder and look up Barebones file".format(mode))
             self.output.text.config(state=DISABLED)
         return True
 
     def code_execute(self, event=None):
-        return self.code_run("-i" + self.filepath, event=event)
+        return self.code_run("EXECUTE", "-i" + self.filepath, event=event)
 
     def code_compile(self, event=None):
         dir_in = self.filepath
         dir_out = self.filepath
         if 0 <= dir_out.find("."):
             dir_out = dir_out[:dir_out.find(".")]
-        return self.code_run("-i" + dir_in, "-o" + dir_out, event=event)
+        return self.code_run("COMPILE", "-i" + dir_in, "-o" + dir_out, event=event)
 
     def render(self) -> None:
         self.input.render()
