@@ -250,10 +250,7 @@ class App:
         find_dialogue.mainloop()
 
     def code_run(self, *arg, event=None):
-        print('ok')
-        if not self.file_save(event):
-            print('ok')
-            return False
+        if not self.file_save(event): return False
         try:
             src_path = os.path.dirname(os.path.realpath(__file__))
             prog_path = os.path.abspath(os.path.join(src_path, "..", "..", "Binaries", "Barebones"))
