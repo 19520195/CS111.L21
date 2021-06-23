@@ -259,16 +259,23 @@ class App:
         try:
             src_path = os.path.dirname(os.path.realpath(__file__))
             prog_path = os.path.abspath(os.path.join(src_path, "..", "..", "Binaries", "Barebones"))
-            pipe_read, pipe_write = os.pipe()
-            pipe_write = os.fdopen(pipe_write)
-            subprocess.call([prog_path] + list(arg), stdout=pipe_write)
-            pipe_write.close()
 
-            pipe_read = os.fdopen(pipe_read)
+            stdout_read, stdout_write = os.pipe()
+            stderr_read, stderr_write = os.pipe()
+
+            stdout_write, stderr_write = os.fdopen(stdout_write), os.fdopen(stderr_write)
+            subprocess.call([prog_path] + list(arg), stdout=stdout_write, stderr=stderr_write)
+            stderr_write.close(), stdout_write.close()
+
+            stdout_read, stderr_read = os.fdopen(stdout_read), os.fdopen(stderr_read)
+
             self.output.text.config(state=NORMAL)
-            self.output.set(pipe_read.read() + "{}::COMPLETE".format(mode))
+            stderr_message = stderr_read.read()
+            if len(stderr_message): self.output.set("{}::FAIL\n{}".format(mode, stderr_message))
+            else: self.output.set("{}::COMPLETE\n{}".format(mode, stdout_read.read()))
+
             self.output.text.config(state=DISABLED)
-            pipe_read.close()
+            stdout_read.close(), stderr_read.close()
         except:
             self.output.text.config(state=NORMAL)
             self.output.set("{}::FAIL_TO_CALL_EXECUTABLE_FILE: checking your Binaries folder and look up Barebones file".format(mode))
