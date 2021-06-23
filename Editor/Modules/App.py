@@ -14,11 +14,11 @@ class App:
     font = ("Courier New", 16)
 
     color = dict({
-        "fg"     : "#dcdcdc",
-        "bg"     : "#1d2432",
-        "digit"  : "#adc5a2",
-        "control": "#ff636f",
-        "builtin": "#63b7fc",
+        "fg"     : "#000000",
+        "bg"     : "#ffffff",
+        "digit"  : "#098658",
+        "control": "#af00db",
+        "builtin": "#267f99",
     })
 
     def __init__(self) -> None:
@@ -33,20 +33,23 @@ class App:
 
         # tool_bar = ToolBar(app, text_editor.coding_space)
         # tool_bar.tool_bar.pack(side=TOP, fill=X)
+        def bind_insensitive(modifier, k, callback):
+            self.app.bind("<{}-{}>".format(modifier, k.upper()), callback)
+            self.app.bind("<{}-{}>".format(modifier, k.lower()), callback)
 
-        self.app.bind("<Control-n>"    , self.file_new   )
-        self.app.bind("<Control-o>"    , self.file_open  )
-        self.app.bind("<Control-s>"    , self.file_save  )
-        self.app.bind("<Control-Alt-s>", self.file_saveas)
+        bind_insensitive("Control"    , "n", self.file_new   )
+        bind_insensitive("Control"    , "o", self.file_open  )
+        bind_insensitive("Control"    , "s", self.file_save  )
+        bind_insensitive("Control-Alt", "s", self.file_saveas)
 
-        self.app.bind("<Key>"            , self.code_colidx     )
-        self.app.bind("<Control-f>"      , self.code_find       )
-        self.app.bind("<Control-z>"      , self.code_undo       )
-        self.app.bind("<Control-y>"      , self.code_redo       )
-        self.app.bind("<Control-Shift-c>", self.code_comment    )
-        self.app.bind("<Control-Shift-x>", self.code_undocomment)
-        self.app.bind("<Control-Alt-x>"  , self.input.clear     )
+        bind_insensitive("Control"      , "f", self.code_find       )
+        bind_insensitive("Control"      , "z", self.code_undo       )
+        bind_insensitive("Control"      , "y", self.code_redo       )
+        bind_insensitive("Control-Shift", "c", self.code_comment    )
+        bind_insensitive("Control-Shift", "x", self.code_undocomment)
+        bind_insensitive("Control-Alt"  , "x", self.input.clear     )
 
+        self.app.bind("<Key>"       , self.code_colidx )
         self.app.bind("<F9>"        , self.code_execute)
         self.app.bind("<Control-F9>", self.code_compile)
 
@@ -78,7 +81,7 @@ class App:
 
         digit_word   = list(map(str, range(10)))
         control_word = ("while", "do", "if", "then", "not", "end")
-        builtin_word = ("incr", "decr", "clear", "assign", "export", "import")
+        builtin_word = ("incr", "decr", "invert", "clear", "assign", "export", "import")
 
         config_color(digit_word  , self.color["digit"]  )
         config_color(control_word, self.color["control"])
@@ -99,10 +102,10 @@ class App:
         self.input.text.tag_config("comment", foreground="#828c9b")
 
     def code_index(self, event=None):
-        num_lines = self.input.get().count('\n')
+        num_lines = max(1, self.input.get().count('\n'))
         self.input.index.configure(state=NORMAL)
         self.input.index.delete(1.0, END)
-        self.input.index.insert(END, ''.join(map(lambda i: "{:3d}".format(i+1), range(num_lines))))
+        self.input.index.insert(END, ''.join(map(lambda i: "{:3d} ".format(i+1), range(num_lines))))
         self.input.index.configure(state=DISABLED)
 
         Y, _ = self.input.text.yview()
@@ -110,6 +113,7 @@ class App:
 
     def file_new(self, event=None):
         self.input.clear()
+        self.code_index(event)
         self.app.title(self.TITLE.format("Untitiled"))
 
     def file_open(self, event=None):
@@ -249,21 +253,27 @@ class App:
         find_dialogue.mainloop()
 
     def code_run(self, *arg, event=None):
+        print('ok')
         if not self.file_save(event):
+            print('ok')
             return False
+        try:
+            src_path = os.path.dirname(os.path.realpath(__file__))
+            prog_path = os.path.abspath(os.path.join(src_path, "..", "..", "Binaries", "Barebones"))
+            pipe_read, pipe_write = os.pipe()
+            pipe_write = os.fdopen(pipe_write)
+            subprocess.call([prog_path] + list(arg), stdout=pipe_write)
+            pipe_write.close()
 
-        src_path = os.path.dirname(os.path.realpath(__file__))
-        prog_path = os.path.abspath(os.path.join(src_path, "..", "..", "Binaries", "Barebones"))
-        pipe_read, pipe_write = os.pipe()
-        pipe_write = os.fdopen(pipe_write)
-        subprocess.call([prog_path] + list(arg), stdout=pipe_write)
-        pipe_write.close()
-
-        pipe_read = os.fdopen(pipe_read)
-        self.output.text.config(state="normal")
-        self.output.set(pipe_read.read() + "> Complete")
-        self.output.text.config(state="disable")
-        pipe_read.close()
+            pipe_read = os.fdopen(pipe_read)
+            self.output.text.config(state=NORMAL)
+            self.output.set(pipe_read.read() + "> Complete")
+            self.output.text.config(state=DISABLED)
+            pipe_read.close()
+        except:
+            self.output.text.config(state=NORMAL)
+            self.output.set("RUNNING::FAIL_TO_CALL_EXECUTABLE_FILE: checking your Binaries folder and look up Barebones file")
+            self.output.text.config(state=DISABLED)
         return True
 
     def code_execute(self, event=None):

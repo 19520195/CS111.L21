@@ -6,7 +6,7 @@ from tkinter import LEFT
 class Menu:
     def __init__(self, app, text_editor) :
         self.icon = Icon()
-        self.menu = tkinter.Menu()
+        self.menu = tkinter.Menu(app.app, bd=0)
         theme_choice = tkinter.StringVar()
 
         sub_file  = tkinter.Menu(self.menu, tearoff=False)
@@ -48,8 +48,8 @@ class Menu:
         sub_edit.add_command(label="Undo"        , image=self.icon.get("undo")     , compound=LEFT, accelerator="Ctrl+Z"         , command=app.code_undo       )
         sub_edit.add_command(label="Redo"        , image=self.icon.get("redo")     , compound=LEFT, accelerator="Ctrl+Y"         , command=app.code_redo       )
         sub_edit.add_command(label="Find"        , image=self.icon.get("find")     , compound=LEFT, accelerator="Ctrl+F"         , command=app.code_find       )
-        sub_edit.add_command(label="Comment"                                   , compound=LEFT, accelerator="Control-Shift-C", command=app.code_comment    )
-        sub_edit.add_command(label="Undo comment"                              , compound=LEFT, accelerator="Control-Shift-X", command=app.code_undocomment)
+        sub_edit.add_command(label="Comment"                                       , compound=LEFT, accelerator="Control-Shift-C", command=app.code_comment    )
+        sub_edit.add_command(label="Undo comment"                                  , compound=LEFT, accelerator="Control-Shift-X", command=app.code_undocomment)
 
         sub_go.add_command(label="Execute"      , image=self.icon.get("run")      , compound=LEFT, accelerator="F9"             , command=app.code_execute)
         sub_go.add_command(label="Compile"      , image=self.icon.get("run")      , compound=LEFT, accelerator="Ctrl+F9"        , command=app.code_compile)
