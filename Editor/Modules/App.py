@@ -26,13 +26,10 @@ class App:
         self.app.geometry("800x600")
         self.app.title(self.TITLE.format("Untitled"))
 
-        # self.icon = Icon(self.app)
         self.input  = Input(self)
         self.output = Output(self)
         self.menu   = Menu(self, self.input.text)
 
-        # tool_bar = ToolBar(app, text_editor.coding_space)
-        # tool_bar.tool_bar.pack(side=TOP, fill=X)
         def bind_insensitive(modifier, k, callback):
             self.app.bind("<{}-{}>".format(modifier, k.upper()), callback)
             self.app.bind("<{}-{}>".format(modifier, k.lower()), callback)
