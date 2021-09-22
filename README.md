@@ -1,6 +1,12 @@
 # Barebones
 Barebones language with Interpreter & Compiler Integrated
 
+# Installation
+```
+mkdir Build
+cmake -B Build -S .
+```
+
 # Notation
 ```
 <Num>      ::= 0, 1, 2, 3, ...
